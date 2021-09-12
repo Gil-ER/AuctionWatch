@@ -1,0 +1,32 @@
+9.1.0
+*Updated for 9.1.0
+
+9.0.03
+*Updated for 9.0.5
+
+9.0.02
+*Updated for 9.0.2
+
+9.0.01
+*Updated for 9.0.1
+
+8.3.05
+*Fixed a bug where auctions would not register if posted from the sell tab
+
+8.3.04
+*Added scroll bar to report window removing limit of 20 toons with auctions
+
+8.3.03
+* Fixed bug not properly displaying number of auctions over 100
+
+8.3.02
+* Bug fixes
+
+8.3.01	
+*fixed a bug that was changing settings
+
+8.3.00
+* First release build
+
+
+

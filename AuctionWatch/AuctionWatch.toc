@@ -1,0 +1,14 @@
+## Interface: 90100
+## Title: Auction Watch
+## DefaultState: enabled
+## Version: 9.1.00
+## Author: Gildina
+
+## SavedVariables: aWatchDB
+
+Data.lua
+Report.lua
+RemoveToon.lua
+AuctionWatch.lua
+Output.lua
+Config.lua
