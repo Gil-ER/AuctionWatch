@@ -25,3 +25,14 @@ jobs:
         run: |
           zip -r AuctionWatch.zip AuctionWatch 
           
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          release_name: ${{ github.event.inputs.tag }}
+          draft: true
+          prerelease: false
+
