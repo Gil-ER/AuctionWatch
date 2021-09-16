@@ -1,5 +1,6 @@
 ## Interface: 90100
 ## Title: Auction Watch
+## Notes: Reminds you to log back into a toon after posting auction(s).
 ## DefaultState: enabled
 ## Version: 9.1.03
 ## Author: Gildina
