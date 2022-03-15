@@ -1,6 +1,9 @@
 --aw namespace variable
 local _, aw = ...;
 
+--Sound constants
+aw.Sound.RaidWarning = 8959;
+
 function AuctionWatchGetAuctions()
 	if aw.auctionCount == nil then 
 		return 0;
