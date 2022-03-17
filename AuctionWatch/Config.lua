@@ -87,10 +87,15 @@ aw.ReportChat_Old, aw.ReportChat_Old_Text = CreateCheckBox( aw.panel, aw.ReportC
 		
 aw.ReportWindow_Old, aw.ReportWindow_Old_Text = CreateCheckBox( aw.panel, aw.ReportWindow, 250, 0, 
 		"Only show window if over.", "Only show the window if auctions have gone past the set number of days." );
-		
+	
+--Play sound on very old auctions checkbox
+aw.PlaySound = CreateCheckBox( aw.panel, aw.ReportWindow, 0, -30, 
+		"Play Raid Warning on very old auctions.", "Play Raid Warning on very old auctions. \n\nIf you haven't been to the auction house for 25 days or more play the raid warning sound at login." );
+
+	
 --Sort by title and checkboxes
 aw.heading1 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
-aw.heading1:SetPoint("TOPLEFT", aw.ReportWindow, "TOPLEFT", 0, -60);
+aw.heading1:SetPoint("TOPLEFT", aw.ReportWindow, "TOPLEFT", 0, -90);
 aw.heading1:SetText("Sort report by:");
 --By Date checkbox
 aw.ByDate, aw.ByDate_Text = CreateCheckBox( aw.panel, aw.heading1, 0, -20, 

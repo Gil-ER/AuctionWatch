@@ -2,7 +2,7 @@
 local _, aw = ...;
 
 --Sound constants
-aw.Sound.RaidWarning = 8959;
+--aw.Sound.RaidWarning = 8959;
 
 function AuctionWatchGetAuctions()
 	if aw.auctionCount == nil then 
