@@ -13,7 +13,7 @@ function AuctionWatchGetAuctions()
 end
 
 local isKeyValid = function (key)
-	--Returns true if aWatchDB["Settings"][key] exists in the database
+	--Returns true if aWatchDB.Settings[key] exists in the database
 	aw:VerifyDatabase()	--check if existing and add with default values if not
 	if aWatchDB.Settings[key] == nil then return false; else return true; end;
 end
@@ -42,29 +42,30 @@ function aw:SetWindowOnlyOver(value)	if isKeyValid("WinOnlyOver") then aWatchDB.
 function aw:SetSoundFlag(value)	 		if isKeyValid("PlaySound") then aWatchDB.Settings.PlaySound = value; end; end;
 
 function aw:RemoveToonFromDB(t)
-	if aWatchDB["Auctions"] ~= nil then --delete this toon if there is no current auctions
-		if aWatchDB["Auctions"][t] ~= nil then aWatchDB["Auctions"][t] = nil; end;
+	if aWatchDB.Auctions ~= nil then --delete this toon if there is no current auctions
+		if aWatchDB.Auctions[t] ~= nil then aWatchDB.Auctions[t] = nil; end;
 	end;
 end
 
 function aw:UpdateToon(t)
-	if aWatchDB["Auctions"] == nil then aWatchDB["Auctions"] = {}; end;	--create table if empty
-	aWatchDB["Auctions"][t] = { ["count"] = aw.auctionCount; ["time"] = time() };
+	if aWatchDB.Auctions == nil then aWatchDB.Auctions = {}; end;	--create table if empty
+	aWatchDB.Auctions[t] = { ["count"] = aw.auctionCount; ["time"] = time() };
 end
 
 function aw:VerifyDatabase()
 	--check if DB exists  and create if not
 	if aWatchDB == nil then aWatchDB = {}; end;		
-	if aWatchDB["Settings"] == nil then	aw:DefaultSettings(); end;
+	if aWatchDB.Settings == nil then	aw:DefaultSettings(); end;
+	if aWatchDB.Settings.PlaySound == nil then aWatchDB.Settings.PlaySound = true; end;
 end
 
 function aw:GetCount(t)
 	if t == nil then t = aw.ID; end;
 	--returns the number of auctions that toon 't' has listed (according to the database)
-	if aWatchDB["Auctions"] ~= nil then
-		if aWatchDB["Auctions"][t] ~= nil then 
-			if aWatchDB["Auctions"][t]["count"] ~= nil then 
-				return aWatchDB["Auctions"][t]["count"]; 
+	if aWatchDB.Auctions ~= nil then
+		if aWatchDB.Auctions[t] ~= nil then 
+			if aWatchDB.Auctions[t]["count"] ~= nil then 
+				return aWatchDB.Auctions[t]["count"]; 
 			end
 		end
 	end	
@@ -74,7 +75,7 @@ function aw:GetCount(t)
 end
 
 function aw:DefaultSettings()
-	aWatchDB["Settings"] = { 	
+	aWatchDB.Settings = { 	
 		["Chat"] = false; 			--Don't list to chat
 		["OnlyOver"] = true; 		--Only list with expired auctions
 		["Window"] = true; 			--List to window(aw.Output frame)

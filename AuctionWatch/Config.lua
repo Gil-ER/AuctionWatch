@@ -38,7 +38,7 @@ function aw:LoadOptions()
 	if aw.ReportWindow:GetChecked() == true then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
 	else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide();
 	end;
-	aw.PlaySound:SetChecked(aw:GetSoundFlag() )
+	aw.PlaySound:SetChecked(aw:GetSoundFlag() );
 end
 
 local SaveOptions = function()
