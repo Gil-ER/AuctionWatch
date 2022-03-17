@@ -38,6 +38,7 @@ function aw:LoadOptions()
 	if aw.ReportWindow:GetChecked() == true then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
 	else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide();
 	end;
+	aw.PlaySound:SetChecked(aw:GetSoundFlag() )
 end
 
 local SaveOptions = function()
@@ -48,6 +49,7 @@ local SaveOptions = function()
 	aw:SetAsc( aw.SortAsc:GetChecked() );
 	aw:SetByDate( aw.ByDate:GetChecked() );
 	aw:SetWindowOnlyOver( aw.ReportWindow_Old:GetChecked() );
+	aw:SetSoundFlag(aw.PlaySound:GetChecked() );
 end
 
 --Creat the ConfigPanel ********************************************************************************
