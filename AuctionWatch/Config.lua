@@ -95,7 +95,7 @@ aw.PlaySound = CreateCheckBox( aw.panel, aw.ReportWindow, 0, -30,
 	
 --Sort by title and checkboxes
 aw.heading1 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
-aw.heading1:SetPoint("TOPLEFT", aw.ReportWindow, "TOPLEFT", 0, -90);
+aw.heading1:SetPoint("TOPLEFT", aw.ReportWindow, "TOPLEFT", 0, -60);
 aw.heading1:SetText("Sort report by:");
 --By Date checkbox
 aw.ByDate, aw.ByDate_Text = CreateCheckBox( aw.panel, aw.heading1, 0, -20, 
