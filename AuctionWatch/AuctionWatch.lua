@@ -30,8 +30,8 @@ function frame:OnEvent(event, arg1, arg2)
 			aw:myPrint(aw:colorString("red", "*******************************************") );
 			aw:myPrint(aw:colorString("red", "   YOU HAVE VERY OLD AUCTIONS") );
 			aw:myPrint(aw:colorString("red", "*******************************************") );
-			RW_Sounded = true;
 		end;
+		RW_Sounded = true;
 	end;
 	
 	if event == "PLAYER_LOGIN" then 
