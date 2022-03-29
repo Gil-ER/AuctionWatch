@@ -43,6 +43,19 @@ function aw:ExpiredAuctions()
 	return false;
 end
 
+function aw:VeryOldAuctions()
+	local t = time() - ( 25 * 24 * 60 * 60 ) --current time - (seconds in 25 days)
+	if aWatchDB.Auctions ~= nil then
+		for cName, cTable in pairs(aWatchDB.Auctions) do
+			if cTable.time < t then 
+				--Older than x days return true
+				return true;
+			end;
+		end;
+	end;
+	return false;
+end;
+
 function aw:ReportAuctionsToChat()
 	--List a report to chat of toons with auctions
 	local auc = {};
