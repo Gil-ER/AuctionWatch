@@ -1,4 +1,4 @@
-## Interface: 90201
+## Interface: 90200
 ## Title: Auction Watch
 ## Notes: Reminds you to log back into a toon after posting auction(s).
 ## DefaultState: enabled
