@@ -18,49 +18,6 @@ function aw:myPrint( ... )
 	print(prefix,  message);
 end
 
--- local ButtonFactory = function (text, ttip)
-	-- --text: caption for the button
-	-- --creates a new button and places it in an array then sizes and positions it 
-	-- local bCount = #aw.button + 1;
-	-- aw.button[bCount] = CreateFrame("Button", "AwButton" .. bCount, aw.Output)
-	-- local b = aw.button[bCount];
-	-- if bCount == 1 then
-		-- b:SetPoint("BOTTOMRIGHT", aw.Output, "BOTTOMRIGHT",-5, 5)
-	-- else
-		-- b:SetPoint("BOTTOMRIGHT", aw.button[bCount - 1], "BOTTOMLEFT", 0, 0)
-	-- end
-	-- b:SetWidth((aw.Output:GetWidth() - 5 ) / 3);
-	-- b:SetHeight(25);        
-	-- b:SetNormalFontObject("GameFontNormal")
-	-- b:SetText(text);
-	
-	-- local ntex = b:CreateTexture()
-	-- ntex:SetTexture("Interface/Buttons/UI-Panel-Button-Up")
-	-- ntex:SetTexCoord(0, 0.625, 0, 0.6875)
-	-- ntex:SetAllPoints()	
-	-- b:SetNormalTexture(ntex)
-	
-	-- local htex = b:CreateTexture()
-	-- htex:SetTexture("Interface/Buttons/UI-Panel-Button-Highlight")
-	-- htex:SetTexCoord(0, 0.625, 0, 0.6875)
-	-- htex:SetAllPoints()
-	-- b:SetHighlightTexture(htex)
-	
-	-- local ptex = b:CreateTexture()
-	-- ptex:SetTexture("Interface/Buttons/UI-Panel-Button-Down")
-	-- ptex:SetTexCoord(0, 0.625, 0, 0.6875)
-	-- ptex:SetAllPoints()
-	-- b:SetPushedTexture(ptex)
-	
-	-- b:SetScript("OnEnter", function (self)
-		-- GameTooltip:SetOwner(self, "ANCHOR_TOP");
-		-- GameTooltip:AddLine(ttip)
-		-- GameTooltip:Show();
-	-- end);
-	-- b:SetScript("OnLeave", function(self) GameTooltip:Hide(); end);
-	
--- end
-
 --Create strings and position for form info
 local CreateStringTable = function ()
 	for i = 1, 20 do
@@ -114,12 +71,12 @@ function aw.auctions:AddLine(col1, col2, col3, col4, col5)
 	list[idx] = { [1] = col1; [2] = col2; [3] = col3; [4] = col4; [5] = col5 };	
 end
 
-function aw.auctions:Show(idx)
+function aw.auctions:Show(slide, idx)
 	if idx == nil then idx = 1; end;
-	if aw.Output.Slider == nil then print("nil"); return; end;
+	if slide == nil then print("nil"); return; end;
 	aw:ClearAllText();
-	aw.Output.Slider:SetMinMaxValues(1, #list);
-	aw.Output.Slider:SetValue(idx);
+	slide:SetMinMaxValues(1, #list);
+	slide:SetValue(idx);
 	if #list < 1 then return; end;
 	if idx > #list then idx = #list; end;
 	for row = 0, 19 do
@@ -245,39 +202,10 @@ params = {
 	width = 350,				--frame width
 	height = 400,				--frame height
 	orienation = "VERTICAL",	--VERTICAL (side)
-	scrollFunc = function (i) aw.auctions:Show(i); end;
-	--pressFunc = function (self) print("You clicked the button."); end;
-
-
+	scrollFunc = function (self, i) aw.auctions:Show(self, i); end;
 }
-aw.Output.Slider = aw:createSlider(params);
+aw:createSlider(params);
 
-	
---aw.OutputSlider = CreateFrame("Slider", "AW_Output_Slider", aw.Output, "OptionsSliderTemplate");
---aw.OutputSlider:SetOrientation("VERTICAL");
---aw.OutputSlider:SetPoint ("TOPRIGHT", aw.Output, "TOPRIGHT", -5, -25); 
---aw.OutputSlider:SetWidth(10);
---aw.OutputSlider:SetHeight(310); 
---getglobal(aw.OutputSlider:GetName() .. "Low"):SetText("");
---getglobal(aw.OutputSlider:GetName() .. "High"):SetText("");
--- aw.OutputSlider:SetScript( "OnValueChanged", function (self)
-	-- local i = tonumber( format( "%.0f", aw.OutputSlider:GetValue() ) );	--convert to integer
-	-- --Only update the list if the number changed
-	-- if i ~= currentIndex then			
-		-- currentIndex = i
-		-- aw.auctions:Show(i);
-	-- end
--- end);
--- aw.Output:SetScript( "OnMouseWheel", function (self, dir)
-	-- local pos = tonumber( format( "%.0f", aw.OutputSlider:GetValue() ) );	--convert to integer
-	-- local sMin, sMax = aw.OutputSlider:GetMinMaxValues();
-	-- if pos == sMax or pos == sMax then return; end;
-	-- if dir == 1 then aw.OutputSlider:SetValue( pos - 1 ); end;	
-	-- if dir == -1 then aw.OutputSlider:SetValue( pos + 1 ); end;
--- end);
-
-
-
---aw.button[1]:SetScript("OnEscapePressed", function(self) aw.Output:Hide(); end); --looking for a control with event
+--aw.Output:SetScript("OnEscapePressed", function(self) aw.Output:Hide(); end); --looking for a control with event
 aw.Output:Hide();
 

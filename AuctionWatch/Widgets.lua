@@ -1,6 +1,57 @@
 local addon, aw = ...;
 
 --**********************************************************************************
+--	Checkbox widget
+--**********************************************************************************
+
+--	Paste code into caller and edit
+-- params = {
+	-- name = nil,				--globally unique, only change if you need it
+	-- parent = ns.Output,			--parent frame
+	-- relFrame = ns.Output,		--relative control for positioning
+	-- anchor = "TOPRIGHT", 		--anchor point of this form
+	-- relPoint = "TOPRIGHT",		--relative point for positioning	
+	-- xOff = -5,					--x offset from relative point
+	-- yOff = -25,					--y offset from relative point
+	-- caption = "",				--Text displayed beside checkbox
+	-- ttip = ""					--Tooltip
+-- }
+-- slider = aw:createCheckBox(params);
+
+local frameCount = 0;
+local createCheckBox = function ( opts )	
+	frameCount = frameCount + 1;		--count each frame created
+	if opts.name == nil or opts.name == "" then
+		--Unique name generator, addonName + string + counterValue
+		opts.name = addon .. "GeneratedCheckboxNumber" .. frameCount;
+	end;
+	local cb = CreateFrame("CheckButton", opts.name, opts.parent, "ChatConfigCheckButtonTemplate");
+	cb:SetPoint(opts.anchor, opts.relFrame, opts.relPoint, opts.xOff, opts.yOff);
+	cb:SetSize(32, 32);	
+	local txt = opts.parent:CreateFontString(nil, "OVERLAY", "GameFontWhite");
+	txt:SetPoint("BOTTOMLEFT", cb, "BOTTOMRIGHT", 5, 10);
+	txt:SetText(opts.caption);	
+	cb.tooltip = opts.ttip;
+	return cb, txt;
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--**********************************************************************************
 --	Button widget
 --**********************************************************************************
 local buttonCount = 0;
@@ -98,7 +149,7 @@ function aw:createSlider(opts)
 		--Only update the list if the number changed
 		if i ~= currentIndex then			
 			currentIndex = i
-			opts.scrollFunc(i);
+			opts.scrollFunc(slide, i);
 		end
 	end);
 	opts.parent:SetScript( "OnMouseWheel", function (self, dir)
