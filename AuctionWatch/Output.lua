@@ -219,6 +219,7 @@ function aw:createSlider(opts)
 		--Only update the list if the number changed
 		if i ~= currentIndex then			
 			currentIndex = i
+			scrollFunc(i)
 			aw.auctions:Show(i);
 		end
 	end);
@@ -244,8 +245,8 @@ params = {
 	width = 350,				--frame width
 	height = 400,				--frame height
 	orienation = "VERTICAL",	--VERTICAL (side)
-	scrollFunc = aw.auctions:Show(i);
-
+	scrollFunc = function (i) aw.auctions:Show(i); end;
+	--pressFunc = function (self) print("You clicked the button."); end;
 
 
 }
