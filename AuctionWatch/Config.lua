@@ -1,5 +1,6 @@
 --aw namespace variable
 local addon, aw = ...;
+local params = {};
 
 local CreateCheckBox = function ( parent, anchor, xOfset, yOfset, heading, ttip )
 	--Creates a checkbox, sizes it, positions it and adds a tooltip
@@ -82,7 +83,6 @@ aw.description:SetPoint("TOPLEFT", 15, -40);
 aw.description:SetText("These are the settings that control what is included in the report, where it is presented and how it is formated.");
 
 -- Report to chat checkbox
-
 params = {
 	parent = aw.panel,
 	relFrame = aw.description,
@@ -92,7 +92,6 @@ params = {
 	yOff = -30,
 	caption = "Report to chat.",
 	ttip = "Print auction report in the default chat window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions."
-	--pressFunc = function() cbClicked() end
 }
 aw.ReportChat, aw.ReportChat_Text = aw:createCheckBox(params);
 aw.ReportChat:SetScript( "OnClick", function() cbClicked(); end);
@@ -106,41 +105,84 @@ params = {
 	yOff = -30,
 	caption = "Report to window.",
 	ttip = "Print auction report in a window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions."
-	--pressFunc = function(cb) if cb:GetChecked() then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
-					--else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end; end
 }
 aw.ReportWindow, aw.ReportWindow_Text = aw:createCheckBox(params);
 aw.ReportWindow:SetScript( "OnClick", function() cbClicked(); end);
--- aw.ReportWindow, aw.ReportWindow_Text = CreateCheckBox( aw.panel, aw.ReportChat, 0, -30, 
-		-- "Report to window.", "Print auction report in a window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions." );
--- aw.ReportWindow:SetScript( "OnClick", function(self)
-	-- --Toggles a secondary option when the primary is selected
-	-- if aw.ReportWindow:GetChecked() then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
-	-- else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end;
--- end);
-		
 --Only show old checkboxes
-aw.ReportChat_Old, aw.ReportChat_Old_Text = CreateCheckBox( aw.panel, aw.ReportChat, 250, 0, 
-		"Only show if over.", "Only list the auctions that have gone past the set number of days." );
-		
-aw.ReportWindow_Old, aw.ReportWindow_Old_Text = CreateCheckBox( aw.panel, aw.ReportWindow, 250, 0, 
-		"Only show window if over.", "Only show the window if auctions have gone past the set number of days." );
-	
---Play sound on very old auctions checkbox
-aw.PlaySound = CreateCheckBox( aw.panel, aw.ReportWindow, 0, -30, 
-		"Play Raid Warning on very old auctions.", "Play Raid Warning on very old auctions. \n\nIf you haven't been to the auction house for 25 days or more play the raid warning sound at login." );
+params = {
+	parent = aw.panel,
+	relFrame = aw.ReportChat,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 250,
+	yOff = 0,
+	caption = "Only show if over.",
+	ttip = "Only list the auctions that have gone past the set number of days."
+}
+aw.ReportChat_Old, aw.ReportChat_Old_Text = aw:createCheckBox(params);
+params = {
+	parent = aw.panel,
+	relFrame = aw.ReportWindow,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 250,
+	yOff = 0,
+	caption = "Only show window if over.",
+	ttip = "Only show the window if auctions have gone past the set number of days."
+}
+aw.ReportWindow_Old, aw.ReportWindow_Old_Text = aw:createCheckBox(params);
+params = {
+	parent = aw.panel,
+	relFrame = aw.ReportWindow,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 0,
+	yOff = -30,
+	caption = "Play Raid Warning on very old auctions.",
+	ttip = "Play Raid Warning on very old auctions. \n\nIf you haven't been to the auction house for 25 days or more play the raid warning sound at login."
+}
+aw.PlaySound = aw:createCheckBox(params);
 
-	
 --Sort by title and checkboxes
 aw.heading1 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
 aw.heading1:SetPoint("TOPLEFT", aw.ReportWindow, "TOPLEFT", 0, -90);
 aw.heading1:SetText("Sort report by:");
 --By Date checkbox
-aw.ByDate, aw.ByDate_Text = CreateCheckBox( aw.panel, aw.heading1, 0, -20, 
-		"By Date", "Report is sorted based on when auctions were posted." );
-aw.ByDate:SetScript( "OnClick", function(self) 
-	aw.ByCount:SetChecked(not aw.ByDate:GetChecked());
-end); 
+params = {
+	parent = aw.panel,
+	relFrame = aw.heading1,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 0,
+	yOff = -20,
+	caption = "By Date",
+	ttip = "Report is sorted based on when auctions were posted."
+}
+aw.ByDate, aw.ByDate_Text = aw:createCheckBox(params);
+params = {
+	parent = aw.panel,
+	relFrame = aw.heading1,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 0,
+	yOff = -20,
+	caption = "By Date",
+	ttip = "Report is sorted based on when auctions were posted."
+}
+aw.ByDate, aw.ByDate_Text = aw:createCheckBox(params);
+aw.ByDate:SetScript( "OnClick", function(self) 	aw.ByCount:SetChecked(not aw.ByDate:GetChecked());
+--By count checkbox
+aw.ByCount, aw.ByCount_Text = CreateCheckBox( aw.panel, aw.ByDate, 0, -30, 
+		"Number of auctions", "Report is sorted based on the number of auctions posted." );
+aw.ByCount:SetScript( "OnClick", function(self) 
+	aw.ByDate:SetChecked(not aw.ByCount:GetChecked());
+end);
+
+
+
+
+-- aw.ByDate, aw.ByDate_Text = CreateCheckBox( aw.panel, aw.heading1, 0, -20, 	"By Date", "Report is sorted based on when auctions were posted." );
+--aw.ByDate:SetScript( "OnClick", function(self) 	aw.ByCount:SetChecked(not aw.ByDate:GetChecked());end); 
 --By count checkbox
 aw.ByCount, aw.ByCount_Text = CreateCheckBox( aw.panel, aw.ByDate, 0, -30, 
 		"Number of auctions", "Report is sorted based on the number of auctions posted." );

@@ -32,8 +32,8 @@ function aw:createCheckBox(opts)
 	local txt = opts.parent:CreateFontString(nil, "OVERLAY", "GameFontWhite");
 	txt:SetPoint("BOTTOMLEFT", cb, "BOTTOMRIGHT", 5, 10);
 	txt:SetText(opts.caption);	
-	--cb:SetScript( "OnClick", opts.pressFunc());
-	cb.tooltip = opts.ttip;
+	--cb:SetScript( "OnClick", function() opts.pressFunc() end);
+	cb.tooltip = opts.ttip;	
 	return cb, txt;
 end
 
