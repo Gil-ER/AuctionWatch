@@ -1,5 +1,5 @@
 --aw namespace variable
-local _, aw = ...;
+local addon, aw = ...;
 
 local CreateCheckBox = function ( parent, anchor, xOfset, yOfset, heading, ttip )
 	--Creates a checkbox, sizes it, positions it and adds a tooltip
@@ -52,6 +52,21 @@ local SaveOptions = function()
 	aw:SetSoundFlag(aw.PlaySound:GetChecked() );
 end
 
+function cbClicked ()
+	if aw.ReportChat:GetChecked() then 
+		aw.ReportChat_Old:Show(); aw.ReportChat_Old_Text:Show();
+	else 
+		aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide(); 
+	end; 
+		--Toggles a secondary option when the primary is selected
+	if aw.ReportWindow:GetChecked() then 
+		aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
+	else 
+		aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); 
+	end;
+	
+end
+
 --Creat the ConfigPanel ********************************************************************************
 aw.panel = CreateFrame( "Frame", "AWPanel", UIParent );
 aw.panel.name = "Auction Watch";	--Name appears in the list to the left of Interface>AddOns
@@ -67,21 +82,42 @@ aw.description:SetPoint("TOPLEFT", 15, -40);
 aw.description:SetText("These are the settings that control what is included in the report, where it is presented and how it is formated.");
 
 -- Report to chat checkbox
-aw.ReportChat, aw.ReportChat_Text = CreateCheckBox( aw.panel, aw.description, 0, -30, 
-		"Report to chat.", "Print auction report in the default chat window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions." );
-aw.ReportChat:SetScript( "OnClick", function(self)
-	--Toggles a secondary option when the primary is selected
-	if aw.ReportChat:GetChecked() then aw.ReportChat_Old:Show(); aw.ReportChat_Old_Text:Show();
-	else aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide(); end;
-end);	
+
+params = {
+	parent = aw.panel,
+	relFrame = aw.description,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 0,
+	yOff = -30,
+	caption = "Report to chat.",
+	ttip = "Print auction report in the default chat window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions."
+	--pressFunc = function() cbClicked() end
+}
+aw.ReportChat, aw.ReportChat_Text = aw:createCheckBox(params);
+aw.ReportChat:SetScript( "OnClick", function() cbClicked(); end);
 --Report to window checkbox
-aw.ReportWindow, aw.ReportWindow_Text = CreateCheckBox( aw.panel, aw.ReportChat, 0, -30, 
-		"Report to window.", "Print auction report in a window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions." );
-aw.ReportWindow:SetScript( "OnClick", function(self)
-	--Toggles a secondary option when the primary is selected
-	if aw.ReportWindow:GetChecked() then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
-	else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end;
-end);
+params = {
+	parent = aw.panel,
+	relFrame = aw.ReportChat,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 0,
+	yOff = -30,
+	caption = "Report to window.",
+	ttip = "Print auction report in a window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions."
+	--pressFunc = function(cb) if cb:GetChecked() then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
+					--else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end; end
+}
+aw.ReportWindow, aw.ReportWindow_Text = aw:createCheckBox(params);
+aw.ReportWindow:SetScript( "OnClick", function() cbClicked(); end);
+-- aw.ReportWindow, aw.ReportWindow_Text = CreateCheckBox( aw.panel, aw.ReportChat, 0, -30, 
+		-- "Report to window.", "Print auction report in a window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions." );
+-- aw.ReportWindow:SetScript( "OnClick", function(self)
+	-- --Toggles a secondary option when the primary is selected
+	-- if aw.ReportWindow:GetChecked() then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
+	-- else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end;
+-- end);
 		
 --Only show old checkboxes
 aw.ReportChat_Old, aw.ReportChat_Old_Text = CreateCheckBox( aw.panel, aw.ReportChat, 250, 0, 

@@ -14,12 +14,13 @@ local addon, aw = ...;
 	-- xOff = -5,					--x offset from relative point
 	-- yOff = -25,					--y offset from relative point
 	-- caption = "",				--Text displayed beside checkbox
-	-- ttip = ""					--Tooltip
+	-- ttip = "",					--Tooltip
+	-- pressFunc = function (self) print("You clicked the button."); end;
 -- }
 -- slider = aw:createCheckBox(params);
 
 local frameCount = 0;
-local createCheckBox = function ( opts )	
+function aw:createCheckBox(opts)	
 	frameCount = frameCount + 1;		--count each frame created
 	if opts.name == nil or opts.name == "" then
 		--Unique name generator, addonName + string + counterValue
@@ -31,6 +32,7 @@ local createCheckBox = function ( opts )
 	local txt = opts.parent:CreateFontString(nil, "OVERLAY", "GameFontWhite");
 	txt:SetPoint("BOTTOMLEFT", cb, "BOTTOMRIGHT", 5, 10);
 	txt:SetText(opts.caption);	
+	--cb:SetScript( "OnClick", opts.pressFunc());
 	cb.tooltip = opts.ttip;
 	return cb, txt;
 end

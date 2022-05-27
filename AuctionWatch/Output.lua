@@ -71,12 +71,12 @@ function aw.auctions:AddLine(col1, col2, col3, col4, col5)
 	list[idx] = { [1] = col1; [2] = col2; [3] = col3; [4] = col4; [5] = col5 };	
 end
 
-function aw.auctions:Show(slide, idx)
+function aw.auctions:Show(idx)
 	if idx == nil then idx = 1; end;
-	if slide == nil then print("nil"); return; end;
+	if aw.slider == nil then print("nil"); return; end;
 	aw:ClearAllText();
-	slide:SetMinMaxValues(1, #list);
-	slide:SetValue(idx);
+	aw.slider:SetMinMaxValues(1, #list);
+	aw.slider:SetValue(idx);
 	if #list < 1 then return; end;
 	if idx > #list then idx = #list; end;
 	for row = 0, 19 do
@@ -176,8 +176,7 @@ function aw:createSlider(opts)
 		--Only update the list if the number changed
 		if i ~= currentIndex then			
 			currentIndex = i
-			scrollFunc(i)
-			aw.auctions:Show(i);
+			opts.scrollFunc(i)
 		end
 	end);
 	opts.parent:SetScript( "OnMouseWheel", function (self, dir)
@@ -202,9 +201,9 @@ params = {
 	width = 350,				--frame width
 	height = 400,				--frame height
 	orienation = "VERTICAL",	--VERTICAL (side)
-	scrollFunc = function (self, i) aw.auctions:Show(self, i); end;
+	scrollFunc = function (i) aw.auctions:Show(i); end;
 }
-aw:createSlider(params);
+aw.slider = aw:createSlider(params);
 
 --aw.Output:SetScript("OnEscapePressed", function(self) aw.Output:Hide(); end); --looking for a control with event
 aw.Output:Hide();
