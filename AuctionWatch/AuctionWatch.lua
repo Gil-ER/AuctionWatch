@@ -24,7 +24,7 @@ frame:RegisterEvent("AUCTION_HOUSE_AUCTION_CREATED");
 function frame:OnEvent(event, arg1, arg2)
 	if event == "SPELLS_CHANGED" then
 		--Play Raid Warning if there are really old auctions
-		if aw:VeryOldAuctions() then
+		if (not RW_Sounded) and aw:VeryOldAuctions() then
 			PlaySound(SOUNDKIT.RAID_WARNING);
 			aw:myPrint(aw:colorString("red", "*******************************************") );
 			aw:myPrint(aw:colorString("red", "   YOU HAVE VERY OLD AUCTIONS") );
