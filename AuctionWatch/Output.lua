@@ -155,38 +155,39 @@ params = {
 								InterfaceOptionsFrame_OpenToCategory(aw.panel); end;
 }
 aw:createButton(params);
+
 --Add a slider to scroll the report if you have more than 20 toons with auctions			
-local sliderCount = 0;
-function aw:createSlider(opts)
-	sliderCount = sliderCount + 1;		--Counts each button created
-	if opts.name == nil or opts.name == "" then
-		--Unique name generator, addonName + string + counterValue
-		opts.name = addon .. "GeneratedSliderNumber" .. sliderCount;
-	end
-	local slide = CreateFrame("Slider", opts.name, aw.Output, "OptionsSliderTemplate");
-	slide:SetOrientation(opts.orienation);
-	slide:SetPoint ("TOPRIGHT", aw.Output, "TOPRIGHT", -5, -25); 
-	slide:SetWidth(10);
-	slide:SetHeight(310);
-	getglobal(opts.name .. "Low"):SetText("");
-	getglobal(opts.name .. "High"):SetText("");
-	slide:SetScript( "OnValueChanged", function ()
-		local i = tonumber( format( "%.0f", slide:GetValue() ) );	--convert to integer
-		--Only update the list if the number changed
-		if i ~= currentIndex then			
-			currentIndex = i
-			opts.scrollFunc(i)
-		end
-	end);
-	opts.parent:SetScript( "OnMouseWheel", function (self, dir)
-		local pos = tonumber( format( "%.0f", slide:GetValue() ) );	--convert to integer
-		local sMin, sMax = slide:GetMinMaxValues();
-		if pos == sMax or pos == sMax then return; end;
-		if dir == 1 then slide:SetValue( pos - 1 ); end;	
-		if dir == -1 then slide:SetValue( pos + 1 ); end;
-	end);
-	return slide;
-end
+-- local sliderCount = 0;
+-- function aw:createSlider(opts)
+	-- sliderCount = sliderCount + 1;		--Counts each button created
+	-- if opts.name == nil or opts.name == "" then
+		-- --Unique name generator, addonName + string + counterValue
+		-- opts.name = addon .. "GeneratedSliderNumber" .. sliderCount;
+	-- end
+	-- local slide = CreateFrame("Slider", opts.name, aw.Output, "OptionsSliderTemplate");
+	-- slide:SetOrientation(opts.orienation);
+	-- slide:SetPoint ("TOPRIGHT", aw.Output, "TOPRIGHT", -5, -25); 
+	-- slide:SetWidth(10);
+	-- slide:SetHeight(310);
+	-- getglobal(opts.name .. "Low"):SetText("");
+	-- getglobal(opts.name .. "High"):SetText("");
+	-- slide:SetScript( "OnValueChanged", function ()
+		-- local i = tonumber( format( "%.0f", slide:GetValue() ) );	--convert to integer
+		-- --Only update the list if the number changed
+		-- if i ~= currentIndex then			
+			-- currentIndex = i
+			-- opts.scrollFunc(i)
+		-- end
+	-- end);
+	-- opts.parent:SetScript( "OnMouseWheel", function (self, dir)
+		-- local pos = tonumber( format( "%.0f", slide:GetValue() ) );	--convert to integer
+		-- local sMin, sMax = slide:GetMinMaxValues();
+		-- if pos == sMax or pos == sMax then return; end;
+		-- if dir == 1 then slide:SetValue( pos - 1 ); end;	
+		-- if dir == -1 then slide:SetValue( pos + 1 ); end;
+	-- end);
+	-- return slide;
+-- end
 
 params = {
 	name = nil,				--globally unique, only change if you need it
@@ -196,12 +197,29 @@ params = {
 	relPoint = "TOPRIGHT",		--relative point for positioning	
 	xOff = -5,					--x offset from relative point
 	yOff = -25,					--y offset from relative point
-	width = 350,				--frame width
-	height = 400,				--frame height
-	orienation = "VERTICAL",	--VERTICAL (side)
-	scrollFunc = function (i) aw.auctions:Show(i); end;
+	width = 10,					--frame width
+	height = 310,				--frame height
+	orientation = "VERTICAL",	--VERTICAL (side)
+	min = "",
+	max = "",
+	step = 1
 }
 aw.slider = aw:createSlider(params);
+aw.slider:SetScript( "OnValueChanged", function ()
+	local i = tonumber( format( "%.0f", aw.slider:GetValue() ) );	--convert to integer
+	--Only update the list if the number changed
+	if i ~= currentIndex then			
+		currentIndex = i;
+		aw.auctions:Show(i);
+	end;
+end);
+aw.Output:SetScript( "OnMouseWheel", function (self, direction)
+	local pos = tonumber( format( "%.0f", aw.slider:GetValue() ) );	--convert to integer
+	local sMin, sMax = aw.slider:GetMinMaxValues();
+	if pos == sMax or pos == sMax then return; end;
+	if direction == 1 then aw.slider:SetValue( pos - 1 ); end;	
+	if direction == -1 then aw.slider:SetValue( pos + 1 ); end;
+end);
 
 --aw.Output:SetScript("OnEscapePressed", function(self) aw.Output:Hide(); end); --looking for a control with event
 aw.Output:Hide();

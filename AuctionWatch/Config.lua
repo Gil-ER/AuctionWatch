@@ -153,9 +153,18 @@ params = {
 }
 aw.ByCount = aw:createCheckBox(params);
 aw.ByCount:SetScript( "OnClick", function(self) aw.ByDate:SetChecked(not aw.ByCount:GetChecked()); end);
--- Sort ascending checkbox		
-aw.SortAsc, aw.SortAsc_Text = CreateCheckBox( aw.panel, aw.ByDate, 250, 0, 
-		"Sort Ascending", "The toon with the fewest auctions or most recent visit to the auction house will be listed first." );
+-- Sort ascending checkbox	
+params = {
+	parent = aw.panel,
+	relFrame = aw.ByDate,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 250,
+	yOff = -0,
+	caption = "Sort Ascendin",
+	ttip = "The toon with the fewest auctions or most recent visit to the auction house will be listed first."
+}
+aw.SortAsc, aw.SortAsc_Text = aw:createCheckBox(params);
 aw.SortAsc:SetScript( "OnClick", function(self) aw.SortDesc:SetChecked(not aw.SortAsc:GetChecked()); end);
 --Sort descending checkbox
 params = {
@@ -184,10 +193,13 @@ params = {
 	yOff = -40,
 	width = 400,
 	height = 20,
-	orientation = "HORIZONTAL",	--VERTICAL (side)
-	scrollFunc = function(i) ns.MyList:Show(i); end;
+	orientation = "HORIZONTAL",
+	min = 1,
+	max = 30,
+	step = 1
 }
-aw.DaysSlider = ns:createSlider(params);
+aw.DaysSlider = aw:createSlider(params);
+--aw.DaysSlider:SetValue(aw:GetDays());
 aw.DaysSlider:SetScript( "OnValueChanged", function (self)
 	getglobal(aw.DaysSlider:GetName() .. "Text"):SetText(format( "%i", aw.DaysSlider:GetValue() ) );
 end);

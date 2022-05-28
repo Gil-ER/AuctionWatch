@@ -22,7 +22,7 @@ end
 function aw:GetChat() 			if isKeyValid("Chat") then return aWatchDB.Settings.Chat; end; end;
 function aw:GetWindow() 		if isKeyValid("Window") then return aWatchDB.Settings.Window; end; end;
 function aw:GetOnlyOver() 		if isKeyValid("OnlyOver") then return aWatchDB.Settings.OnlyOver; end; end; 
-function aw:GetDays() 	 		if isKeyValid("Days") then return aWatchDB.Settings.Days; end; end;
+function aw:GetDays() 	 		if isKeyValid("Days") then return aWatchDB.Settings.Days; else return 2; end; end;
 function aw:GetAsc()      		if isKeyValid("Asc") then return aWatchDB.Settings.Asc; end; end;
 function aw:GetByDate()   	 	if isKeyValid("ByDate") then return aWatchDB.Settings.ByDate; end; end;
 function aw:GetWindowOnlyOver()	if isKeyValid("WinOnlyOver") then return aWatchDB.Settings.WinOnlyOver; end; end;

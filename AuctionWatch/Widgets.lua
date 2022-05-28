@@ -107,27 +107,14 @@ function aw:createSlider(opts)
 		--Unique name generator, addonName + string + counterValue
 		opts.name = addon .. "GeneratedSliderNumber" .. sliderCount;
 	end
-	local slide = CreateFrame("Slider", opts.name, aw.Output, "OptionsSliderTemplate");
-	slide:SetOrientation(opts.orienation);
-	slide:SetPoint ("TOPRIGHT", aw.Output, "TOPRIGHT", -5, -25); 
-	slide:SetWidth(10);
-	slide:SetHeight(310);
-	getglobal(opts.name .. "Low"):SetText("");
-	getglobal(opts.name .. "High"):SetText("");
-	slide:SetScript( "OnValueChanged", function ()
-		local i = tonumber( format( "%.0f", slide:GetValue() ) );	--convert to integer
-		--Only update the list if the number changed
-		if i ~= currentIndex then			
-			currentIndex = i
-			opts.scrollFunc(slide, i);
-		end
-	end);
-	opts.parent:SetScript( "OnMouseWheel", function (self, dir)
-		local pos = tonumber( format( "%.0f", slide:GetValue() ) );	--convert to integer
-		local sMin, sMax = slide:GetMinMaxValues();
-		if pos == sMax or pos == sMax then return; end;
-		if dir == 1 then slide:SetValue( pos - 1 ); end;	
-		if dir == -1 then slide:SetValue( pos + 1 ); end;
-	end);
+	local slide = CreateFrame("Slider", opts.name, opts.parent, "OptionsSliderTemplate");	
+	slide:SetOrientation(opts.orientation);
+	slide:SetPoint ("TOPRIGHT", opts.relFrame, "TOPRIGHT", opts.xOff, opts.yOff); 
+	slide:SetWidth(opts.width);
+	slide:SetHeight(opts.height);	
+	getglobal(opts.name .. "Low"):SetText(opts.min);
+	getglobal(opts.name .. "High"):SetText(opts.max);	
+	if opts.min ~= "" and opts.max ~= "" then slide:SetMinMaxValues(opts.min, opts.max) end;
+	slide:SetValueStep(opts.step)
 	return slide;
 end
