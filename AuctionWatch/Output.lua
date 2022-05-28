@@ -156,7 +156,6 @@ params = {
 }
 aw:createButton(params);
 --Add a slider to scroll the report if you have more than 20 toons with auctions			
-			
 local sliderCount = 0;
 function aw:createSlider(opts)
 	sliderCount = sliderCount + 1;		--Counts each button created
@@ -188,7 +187,6 @@ function aw:createSlider(opts)
 	end);
 	return slide;
 end
-
 
 params = {
 	name = nil,				--globally unique, only change if you need it

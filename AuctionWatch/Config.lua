@@ -2,26 +2,6 @@
 local addon, aw = ...;
 local params = {};
 
-local CreateCheckBox = function ( parent, anchor, xOfset, yOfset, heading, ttip )
-	--Creates a checkbox, sizes it, positions it and adds a tooltip
-		--name:		Global name for this checkbox
-		--parent:	Parent frame for the checkbox (CreateFrams)
-		--anchor:	frame refrenced to positioning (SetPoint)
-		--xOfset, yOfset: Offsets used in SetPoint
-		--heading:	Text that appears right of the box
-		--ttip:		Tooltip text
-	--The first button is located at the bottom left of the frame
-	--Further buttons are added to the left of the previous
-	local cb = CreateFrame("CheckButton", name, parent, "ChatConfigCheckButtonTemplate");
-	cb:SetPoint("TOPLEFT", anchor, "TOPLEFT", xOfset, yOfset);
-	cb:SetSize(32, 32);	
-	local txt = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontWhite");
-	txt:SetPoint("BOTTOMLEFT", cb, "BOTTOMRIGHT", 5, 10);
-	txt:SetText(heading);	
-	cb.tooltip = ttip;
-	return cb, txt;
-end
-
 function aw:LoadOptions() 
 	aw.ReportChat:SetChecked( aw:GetChat() );
 	aw.ReportWindow:SetChecked( aw:GetWindow() );
@@ -68,7 +48,7 @@ function cbClicked ()
 	
 end
 
---Creat the ConfigPanel ********************************************************************************
+--Create the ConfigPanel ********************************************************************************
 aw.panel = CreateFrame( "Frame", "AWPanel", UIParent );
 aw.panel.name = "Auction Watch";	--Name appears in the list to the left of Interface>AddOns
 InterfaceOptions_AddCategory(aw.panel);
@@ -159,68 +139,60 @@ params = {
 	ttip = "Report is sorted based on when auctions were posted."
 }
 aw.ByDate, aw.ByDate_Text = aw:createCheckBox(params);
+aw.ByDate:SetScript( "OnClick", function(self) 	aw.ByCount:SetChecked(not aw.ByDate:GetChecked()) end);
+--By count checkbox
 params = {
 	parent = aw.panel,
-	relFrame = aw.heading1,
+	relFrame = aw.ByDate,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 0,
-	yOff = -20,
-	caption = "By Date",
-	ttip = "Report is sorted based on when auctions were posted."
+	yOff = -30,
+	caption = "Number of auctions",
+	ttip = "Report is sorted based on the number of auctions posted."
 }
-aw.ByDate, aw.ByDate_Text = aw:createCheckBox(params);
-aw.ByDate:SetScript( "OnClick", function(self) 	aw.ByCount:SetChecked(not aw.ByDate:GetChecked());
---By count checkbox
-aw.ByCount, aw.ByCount_Text = CreateCheckBox( aw.panel, aw.ByDate, 0, -30, 
-		"Number of auctions", "Report is sorted based on the number of auctions posted." );
-aw.ByCount:SetScript( "OnClick", function(self) 
-	aw.ByDate:SetChecked(not aw.ByCount:GetChecked());
-end);
-
-
-
-
--- aw.ByDate, aw.ByDate_Text = CreateCheckBox( aw.panel, aw.heading1, 0, -20, 	"By Date", "Report is sorted based on when auctions were posted." );
---aw.ByDate:SetScript( "OnClick", function(self) 	aw.ByCount:SetChecked(not aw.ByDate:GetChecked());end); 
---By count checkbox
-aw.ByCount, aw.ByCount_Text = CreateCheckBox( aw.panel, aw.ByDate, 0, -30, 
-		"Number of auctions", "Report is sorted based on the number of auctions posted." );
-aw.ByCount:SetScript( "OnClick", function(self) 
-	aw.ByDate:SetChecked(not aw.ByCount:GetChecked());
-end); 
+aw.ByCount = aw:createCheckBox(params);
+aw.ByCount:SetScript( "OnClick", function(self) aw.ByDate:SetChecked(not aw.ByCount:GetChecked()); end);
 -- Sort ascending checkbox		
 aw.SortAsc, aw.SortAsc_Text = CreateCheckBox( aw.panel, aw.ByDate, 250, 0, 
 		"Sort Ascending", "The toon with the fewest auctions or most recent visit to the auction house will be listed first." );
-aw.SortAsc:SetScript( "OnClick", function(self) 
-	aw.SortDesc:SetChecked(not aw.SortAsc:GetChecked());
-end);		
+aw.SortAsc:SetScript( "OnClick", function(self) aw.SortDesc:SetChecked(not aw.SortAsc:GetChecked()); end);
 --Sort descending checkbox
-aw.SortDesc, aw.SortDesc_Text = CreateCheckBox( aw.panel, aw.SortAsc, 0, -30, 
-		"Sort Descending", "The toon with the most auctions or the longest amount of time since their last visit to the auction house will be listed first." );
-aw.SortDesc:SetScript( "OnClick", function(self) 
-	aw.SortAsc:SetChecked(not aw.SortDesc:GetChecked());
-end);				
+params = {
+	parent = aw.panel,
+	relFrame = aw.SortAsc,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 0,
+	yOff = -30,
+	caption = "Sort Descending",
+	ttip = "The toon with the most auctions or the longest amount of time since their last visit to the auction house will be listed first."
+}
+aw.SortDesc, aw.SortDesc_Text = aw:createCheckBox(params);
+aw.SortDesc:SetScript( "OnClick", function(self) aw.SortAsc:SetChecked(not aw.SortDesc:GetChecked()); end);	
 --Day threshold		
 aw.heading2 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
 aw.heading2:SetPoint("TOPLEFT", aw.ByCount, "TOPLEFT", 5, -60);
 aw.heading2:SetText("Days allowed before being reminded to check mail");
 --Number of days slider
-aw.DaysSlider = CreateFrame("Slider", "AWconfig_Days_Slider", aw.panel, "OptionsSliderTemplate");
-aw.DaysSlider:SetOrientation("HORIZONTAL");
-aw.DaysSlider:SetPoint ("TOPLEFT", aw.heading2, "TOPLEFT", 5, -40); 
-aw.DaysSlider:SetWidth(400);
-aw.DaysSlider:SetHeight(20); 
-aw.DaysSlider.tooltip = "Set the number of days after your last auction house visit that you want warnings to start";
-getglobal(aw.DaysSlider:GetName() .. "Low"):SetText("1");
-getglobal(aw.DaysSlider:GetName() .. "High"):SetText("30");
-aw.DaysSlider:SetMinMaxValues(1, 30);
-aw.DaysSlider:SetValueStep(1);
-aw.DaysSlider:SetValue(2);
-getglobal(aw.DaysSlider:GetName() .. "Text"):SetText(format( "%i", aw.DaysSlider:GetValue() ) );
+params = {
+	parent = aw.panel,
+	relFrame = aw.heading2,
+	anchor = "TOPLEFT",
+	relPoint = "TOPLEFT",
+	xOff = 5,
+	yOff = -40,
+	width = 400,
+	height = 20,
+	orientation = "HORIZONTAL",	--VERTICAL (side)
+	scrollFunc = function(i) ns.MyList:Show(i); end;
+}
+aw.DaysSlider = ns:createSlider(params);
 aw.DaysSlider:SetScript( "OnValueChanged", function (self)
 	getglobal(aw.DaysSlider:GetName() .. "Text"):SetText(format( "%i", aw.DaysSlider:GetValue() ) );
 end);
+
+params = {};
 aw.panel:Hide()
 
 --Panel functions

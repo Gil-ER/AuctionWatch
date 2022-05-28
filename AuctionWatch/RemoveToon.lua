@@ -33,9 +33,7 @@ function aw:RemoveToon()
 		if t ~= nil then AddItem(t, function() ConfirmDelete(t); end); end;		
 	end;
 	AddItem('Close', function() end);	
-	EasyMenu(menuList, l, "cursor", 0, 0, "MENU")
-
-	
+	EasyMenu(menuList, l, "cursor", 0, 0, "MENU")	
 end
 
 

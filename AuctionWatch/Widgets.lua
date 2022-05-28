@@ -3,22 +3,6 @@ local addon, aw = ...;
 --**********************************************************************************
 --	Checkbox widget
 --**********************************************************************************
-
---	Paste code into caller and edit
--- params = {
-	-- name = nil,				--globally unique, only change if you need it
-	-- parent = ns.Output,			--parent frame
-	-- relFrame = ns.Output,		--relative control for positioning
-	-- anchor = "TOPRIGHT", 		--anchor point of this form
-	-- relPoint = "TOPRIGHT",		--relative point for positioning	
-	-- xOff = -5,					--x offset from relative point
-	-- yOff = -25,					--y offset from relative point
-	-- caption = "",				--Text displayed beside checkbox
-	-- ttip = "",					--Tooltip
-	-- pressFunc = function (self) print("You clicked the button."); end;
--- }
--- slider = aw:createCheckBox(params);
-
 local frameCount = 0;
 function aw:createCheckBox(opts)	
 	frameCount = frameCount + 1;		--count each frame created
@@ -36,22 +20,6 @@ function aw:createCheckBox(opts)
 	cb.tooltip = opts.ttip;	
 	return cb, txt;
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 --**********************************************************************************
 --	Button widget

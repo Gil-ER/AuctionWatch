@@ -67,9 +67,7 @@ function aw:GetCount(t)
 			end
 		end
 	end	
-	return 0;	--something was nil so return 0
-
-	
+	return 0;	--something was nil so return 0	
 end
 
 function aw:DefaultSettings()
