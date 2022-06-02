@@ -44,6 +44,8 @@ function aw:ExpiredAuctions()
 end
 
 function aw:VeryOldAuctions()
+	--checkes if any toon has auctions older than 25 days
+	--returns true or false
 	local t = time() - ( 25 * 24 * 60 * 60 ) --current time - (seconds in 25 days)
 	if aWatchDB.Auctions ~= nil then
 		for cName, cTable in pairs(aWatchDB.Auctions) do
