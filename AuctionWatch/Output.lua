@@ -74,10 +74,10 @@ end
 function aw.auctions:Show(idx)
 	if idx == nil then idx = 1; end;
 	if aw.slider == nil then print("nil"); return; end;
+	if #list < 1 then return; end;
 	aw:ClearAllText();
 	aw.slider:SetMinMaxValues(1, #list);
 	aw.slider:SetValue(idx);
-	if #list < 1 then return; end;
 	if idx > #list then idx = #list; end;
 	for row = 0, 19 do
 		t[row + 1][1]:SetText(list[idx + row][1]);
