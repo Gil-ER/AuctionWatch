@@ -22,19 +22,20 @@ frame:RegisterEvent("AUCTION_HOUSE_AUCTION_CREATED");
 
 function frame:OnEvent(event, arg1, arg2)
 	if event == "SPELLS_CHANGED" then
-		--Play Raid Warning if there are really old auctions
+	--Play Raid Warning if there are really old auctions
 		if (not RW_Sounded) and aw:VeryOldAuctions() then
 			PlaySound(SOUNDKIT.RAID_WARNING);
 			aw:myPrint(aw:colorString("red", "*******************************************") );
 			aw:myPrint(aw:colorString("red", "   YOU HAVE VERY OLD AUCTIONS") );
 			aw:myPrint(aw:colorString("red", "*******************************************") );
 		end;
+		tinsert(UISpecialFrames, "AuctionWatchReportFrame");	--Close with ESC key
 	frame:UnregisterEvent("SPELLS_CHANGED");
 	end;
 	
 	if event == "PLAYER_LOGIN" then 
 		aw:VerifyDatabase()
-		aw.auctionCount = aw:GetCount(aw.ID)
+		aw.auctionCount = aw:GetCount(aw.ID);
 		--Single line report on login
 		if aw:ExpiredAuctions() then 
 			aw:myPrint(aw:colorString("red", "You have toons with auctions that need attention.") ); 	
@@ -50,7 +51,7 @@ function frame:OnEvent(event, arg1, arg2)
 			end;
 		end;
 		--Report to chat
-		if aw:GetChat() then aw:ReportAuctionsToChat(); end;
+		if aw:GetChat() then aw:ReportAuctionsToChat(); end;		
 		aw.LoadOptions();
 	end 
 	

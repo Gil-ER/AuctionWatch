@@ -110,7 +110,6 @@ local params = {
 	isMovable = true
 }
 aw.Output = aw:createFrame(params);						--Create the Frame
-tinsert(UISpecialFrames, "AuctionWatchReportFrame");	--Close with ESC key
 CreateStringTable();									--Create a string grid to display the output 
 --Add the buttons and handlers
 local w = (params.width -20) / 3;
