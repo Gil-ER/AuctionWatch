@@ -141,6 +141,5 @@ function aw:ReportAuctionsToWindow( flag )
 		if days > 0 then if days == 1 then dStr = days .. " day"; else dStr = days .. " days"; end; end;
 		aw.auctions:AddLine(v.count, v.name, dStr, hours, mins);
 	end;
-	print ("Show")
 	aw.auctions:Show();
 end

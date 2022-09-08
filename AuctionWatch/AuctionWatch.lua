@@ -30,7 +30,7 @@ function frame:OnEvent(event, arg1, arg2)
 			aw:myPrint(aw:colorString("red", "*******************************************") );
 		end;
 		tinsert(UISpecialFrames, "AuctionWatchReportFrame");	--Close with ESC key
-	frame:UnregisterEvent("SPELLS_CHANGED");
+		frame:UnregisterEvent("SPELLS_CHANGED");
 	end;
 	
 	if event == "PLAYER_LOGIN" then 

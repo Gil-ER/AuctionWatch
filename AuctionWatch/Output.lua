@@ -188,6 +188,5 @@ aw.Output:SetScript( "OnMouseWheel", function (self, direction)
 	if direction == -1 then aw.slider:SetValue( pos + 1 ); end;
 end);
 
---aw.Output:SetScript("OnEscapePressed", function(self) aw.Output:Hide(); end); --looking for a control with event
 aw.Output:Hide();
 
