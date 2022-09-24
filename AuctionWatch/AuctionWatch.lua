@@ -52,7 +52,7 @@ function frame:OnEvent(event, arg1, arg2)
 		end;
 		--Report to chat
 		if aw:GetSetting("Chat") then aw:ReportAuctionsToChat(); end;		
-		aw.LoadOptions();
+		aw:LoadOptions();
 	end 
 	
 	if event == "OWNED_AUCTIONS_UPDATED" then

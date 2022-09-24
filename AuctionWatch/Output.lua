@@ -73,7 +73,7 @@ end
 
 function aw.auctions:Show(idx)
 	if idx == nil then idx = 1; end;
-	if aw.slider == nil then print("nil"); return; end;
+	if aw.slider == nil then return; end;
 	if #list < 1 then return; end;
 	aw:ClearAllText();
 	aw.slider:SetMinMaxValues(1, #list);

@@ -1,42 +1,55 @@
 --aw namespace variable
 local addon, aw = ...;
 local params = {};
+local 	ReportChat, ReportWindow, ReportChat_Old, ReportWindow_Old, 
+		ByDate, ByCount, SortAsc, SortDesc, DaysSlider, PlaySound,
+		ReportWindow_Old_Text;
+
+local defaultSettings = { 	
+	["Chat"] = false; 			--Don't list to chat
+	["OnlyOver"] = true; 		--Only list with expired auctions
+	["Window"] = true; 			--List to window(aw.Output frame)
+	["WinOnlyOver"] = true;		--Only show the frame if there are expired auctions
+	["Days"] = 2; 				--2 days from last AH visit before auctions are considered expired
+	["Asc"] = false; 			--Sort in descending order
+	["ByDate"] = true; 			--Sort by date
+	["PlaySound"] = true }; 	--Play Raid Warning when you have auctiond more then 25 days old
 
 function aw:LoadOptions() 
-	aw.ReportChat:SetChecked( aw:GetSetting("Chat") );
-	aw.ReportWindow:SetChecked( aw:GetSetting("Window") );
-	aw.ReportChat_Old:SetChecked( aw:GetSetting("OnlyOver") );
-	aw.ReportWindow_Old:SetChecked(  aw:GetSetting("SetWindowOnlyOver") );
-	aw.ByDate:SetChecked( aw:GetSetting("ByDate") );
-	aw.ByCount:SetChecked( not aw:GetSetting("ByDate") );
-	aw.SortAsc:SetChecked( aw:GetSetting("Asc") );
-	aw.SortDesc:SetChecked( not aw:GetSetting("Asc") );
-	aw.DaysSlider:SetValue( tonumber(aw:GetSetting("Days")) );
+	ReportChat:SetChecked( aw:GetSetting("Chat") );
+	ReportWindow:SetChecked( aw:GetSetting("Window") );
+	ReportChat_Old:SetChecked( aw:GetSetting("OnlyOver") );
+	ReportWindow_Old:SetChecked(  aw:GetSetting("WinOnlyOver") );
+	ByDate:SetChecked( aw:GetSetting("ByDate") );
+	ByCount:SetChecked( not aw:GetSetting("ByDate") );
+	SortAsc:SetChecked( aw:GetSetting("Asc") );
+	SortDesc:SetChecked( not aw:GetSetting("Asc") );
+	DaysSlider:SetValue( tonumber(aw:GetSetting("Days")) );
 	--show/hide the include option based on the value of the ReportChat field
-	if aw.ReportChat:GetChecked() == true then aw.ReportChat_Old:Show(); aw.ReportChat_Old_Text:Show();
-		else aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide(); end;
-	if aw.ReportWindow:GetChecked() == true then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
-		else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end;
-	aw.PlaySound:SetChecked(aw:GetSetting("PlaySound") );
+	if ReportChat:GetChecked() == true then ReportChat_Old:Show(); ReportChat_Old_Text:Show();
+		else ReportChat_Old:Hide(); ReportChat_Old_Text:Hide(); end;
+	if ReportWindow:GetChecked() == true then ReportWindow_Old:Show(); ReportWindow_Old_Text:Show();
+		else ReportWindow_Old:Hide(); ReportWindow_Old_Text:Hide(); end;
+	PlaySound:SetChecked(aw:GetSetting("PlaySound") );
 end
 
 local SaveOptions = function()
-	aw:dbSaveSetting("Chat", aw.ReportChat:GetChecked() );	
-	aw:dbSaveSetting("OnlyOver",  aw.ReportChat_Old:GetChecked() );	
-	aw:dbSaveSetting("Window",  aw.ReportWindow:GetChecked() );
-	aw:dbSaveSetting("WinOnlyOver",  aw.ReportWindow_Old:GetChecked() );
-	aw:dbSaveSetting("Days",  format( "%i", aw.DaysSlider:GetValue() ) );
-	aw:dbSaveSetting("Asc",  aw.SortAsc:GetChecked() );
-	aw:dbSaveSetting("ByDate",  aw.ByDate:GetChecked() );
-	aw:dbSaveSetting("PlaySound", aw.PlaySound:GetChecked() );
+	aw:dbSaveSetting("Chat", ReportChat:GetChecked() );	
+	aw:dbSaveSetting("OnlyOver",  ReportChat_Old:GetChecked() );	
+	aw:dbSaveSetting("Window",  ReportWindow:GetChecked() );
+	aw:dbSaveSetting("WinOnlyOver",  ReportWindow_Old:GetChecked() );
+	aw:dbSaveSetting("Days",  format( "%i", DaysSlider:GetValue() ) );
+	aw:dbSaveSetting("Asc",  SortAsc:GetChecked() );
+	aw:dbSaveSetting("ByDate",  ByDate:GetChecked() );
+	aw:dbSaveSetting("PlaySound", PlaySound:GetChecked() );
 end
 
 function cbClicked ()
-	if aw.ReportChat:GetChecked() then aw.ReportChat_Old:Show(); aw.ReportChat_Old_Text:Show();
-		else aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide(); end; 
+	if ReportChat:GetChecked() then ReportChat_Old:Show(); ReportChat_Old_Text:Show();
+		else ReportChat_Old:Hide(); ReportChat_Old_Text:Hide(); end; 
 	--Toggles a secondary option when the primary is selected
-	if aw.ReportWindow:GetChecked() then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
-		else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end;	
+	if ReportWindow:GetChecked() then ReportWindow_Old:Show(); ReportWindow_Old_Text:Show();
+		else ReportWindow_Old:Hide(); ReportWindow_Old_Text:Hide(); end;	
 end
 
 --Create the ConfigPanel ********************************************************************************
@@ -45,18 +58,18 @@ aw.panel.name = "Auction Watch";	--Name appears in the list to the left of Inter
 InterfaceOptions_AddCategory(aw.panel);
 
 -- Put the title on the panel
-aw.title = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
-aw.title:SetPoint("TOPLEFT", 15, -15);
-aw.title:SetText("Auction Watch");
+local title = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
+title:SetPoint("TOPLEFT", 15, -15);
+title:SetText("Auction Watch");
 -- Place description under the title
-aw.description = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontwhiteSmall");
-aw.description:SetPoint("TOPLEFT", 15, -40);
-aw.description:SetText("These are the settings that control what is included in the report, where it is presented and how it is formated.");
+local description = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontwhiteSmall");
+description:SetPoint("TOPLEFT", 15, -40);
+description:SetText("These are the settings that control what is included in the report, where it is presented and how it is formated.");
 
 -- Report to chat checkbox
 params = {
 	parent = aw.panel,
-	relFrame = aw.description,
+	relFrame = description,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 0,
@@ -64,12 +77,12 @@ params = {
 	caption = "Report to chat.",
 	ttip = "Print auction report in the default chat window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions."
 }
-aw.ReportChat, aw.ReportChat_Text = aw:createCheckBox(params);
-aw.ReportChat:SetScript( "OnClick", function() cbClicked(); end);
+ReportChat, _ = aw:createCheckBox(params);
+ReportChat:SetScript( "OnClick", function() cbClicked(); end);
 --Report to window checkbox
 params = {
 	parent = aw.panel,
-	relFrame = aw.ReportChat,
+	relFrame = ReportChat,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 0,
@@ -77,12 +90,12 @@ params = {
 	caption = "Report to window.",
 	ttip = "Print auction report in a window. \n\nDisabling both reports will still print a single line in chat when you login if you have expired auctions."
 }
-aw.ReportWindow, aw.ReportWindow_Text = aw:createCheckBox(params);
-aw.ReportWindow:SetScript( "OnClick", function() cbClicked(); end);
+ReportWindow, _ = aw:createCheckBox(params);
+ReportWindow:SetScript( "OnClick", function() cbClicked(); end);
 --Only show old checkboxes
 params = {
 	parent = aw.panel,
-	relFrame = aw.ReportChat,
+	relFrame = ReportChat,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 250,
@@ -90,10 +103,10 @@ params = {
 	caption = "Only show if over.",
 	ttip = "Only list the auctions that have gone past the set number of days."
 }
-aw.ReportChat_Old, aw.ReportChat_Old_Text = aw:createCheckBox(params);
+ReportChat_Old, ReportChat_Old_Text = aw:createCheckBox(params);
 params = {
 	parent = aw.panel,
-	relFrame = aw.ReportWindow,
+	relFrame = ReportWindow,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 250,
@@ -101,10 +114,10 @@ params = {
 	caption = "Only show window if over.",
 	ttip = "Only show the window if auctions have gone past the set number of days."
 }
-aw.ReportWindow_Old, aw.ReportWindow_Old_Text = aw:createCheckBox(params);
+ReportWindow_Old, ReportWindow_Old_Text = aw:createCheckBox(params);
 params = {
 	parent = aw.panel,
-	relFrame = aw.ReportWindow,
+	relFrame = ReportWindow,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 0,
@@ -112,16 +125,16 @@ params = {
 	caption = "Play Raid Warning on very old auctions.",
 	ttip = "Play Raid Warning on very old auctions. \n\nIf you haven't been to the auction house for 25 days or more play the raid warning sound at login."
 }
-aw.PlaySound = aw:createCheckBox(params);
+PlaySound = aw:createCheckBox(params);
 
 --Sort by title and checkboxes
-aw.heading1 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
-aw.heading1:SetPoint("TOPLEFT", aw.ReportWindow, "TOPLEFT", 0, -90);
-aw.heading1:SetText("Sort report by:");
+heading1 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
+heading1:SetPoint("TOPLEFT", ReportWindow, "TOPLEFT", 0, -90);
+heading1:SetText("Sort report by:");
 --By Date checkbox
 params = {
 	parent = aw.panel,
-	relFrame = aw.heading1,
+	relFrame = heading1,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 0,
@@ -129,12 +142,12 @@ params = {
 	caption = "By Date",
 	ttip = "Report is sorted based on when auctions were posted."
 }
-aw.ByDate, aw.ByDate_Text = aw:createCheckBox(params);
-aw.ByDate:SetScript( "OnClick", function(self) 	aw.ByCount:SetChecked(not aw.ByDate:GetChecked()) end);
+ByDate, _ = aw:createCheckBox(params);
+ByDate:SetScript( "OnClick", function(self) 	ByCount:SetChecked(not ByDate:GetChecked()) end);
 --By count checkbox
 params = {
 	parent = aw.panel,
-	relFrame = aw.ByDate,
+	relFrame = ByDate,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 0,
@@ -142,12 +155,12 @@ params = {
 	caption = "Number of auctions",
 	ttip = "Report is sorted based on the number of auctions posted."
 }
-aw.ByCount = aw:createCheckBox(params);
-aw.ByCount:SetScript( "OnClick", function(self) aw.ByDate:SetChecked(not aw.ByCount:GetChecked()); end);
+ByCount = aw:createCheckBox(params);
+ByCount:SetScript( "OnClick", function(self) ByDate:SetChecked(not ByCount:GetChecked()); end);
 -- Sort ascending checkbox	
 params = {
 	parent = aw.panel,
-	relFrame = aw.ByDate,
+	relFrame = ByDate,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 250,
@@ -155,12 +168,12 @@ params = {
 	caption = "Sort Ascendin",
 	ttip = "The toon with the fewest auctions or most recent visit to the auction house will be listed first."
 }
-aw.SortAsc, aw.SortAsc_Text = aw:createCheckBox(params);
-aw.SortAsc:SetScript( "OnClick", function(self) aw.SortDesc:SetChecked(not aw.SortAsc:GetChecked()); end);
+SortAsc, SortAsc_Text = aw:createCheckBox(params);
+SortAsc:SetScript( "OnClick", function(self) SortDesc:SetChecked(not SortAsc:GetChecked()); end);
 --Sort descending checkbox
 params = {
 	parent = aw.panel,
-	relFrame = aw.SortAsc,
+	relFrame = SortAsc,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 0,
@@ -168,16 +181,16 @@ params = {
 	caption = "Sort Descending",
 	ttip = "The toon with the most auctions or the longest amount of time since their last visit to the auction house will be listed first."
 }
-aw.SortDesc, aw.SortDesc_Text = aw:createCheckBox(params);
-aw.SortDesc:SetScript( "OnClick", function(self) aw.SortAsc:SetChecked(not aw.SortDesc:GetChecked()); end);	
+SortDesc, _ = aw:createCheckBox(params);
+SortDesc:SetScript( "OnClick", function(self) SortAsc:SetChecked(not SortDesc:GetChecked()); end);	
 --Day threshold		
-aw.heading2 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
-aw.heading2:SetPoint("TOPLEFT", aw.ByCount, "TOPLEFT", 5, -60);
-aw.heading2:SetText("Days allowed before being reminded to check mail");
+local heading2 = aw.panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge");
+heading2:SetPoint("TOPLEFT", ByCount, "TOPLEFT", 5, -60);
+heading2:SetText("Days allowed before being reminded to check mail");
 --Number of days slider
 params = {
 	parent = aw.panel,
-	relFrame = aw.heading2,
+	relFrame = heading2,
 	anchor = "TOPLEFT",
 	relPoint = "TOPLEFT",
 	xOff = 5,
@@ -189,9 +202,9 @@ params = {
 	max = 30,
 	step = 1
 }
-aw.DaysSlider = aw:createSlider(params);
-aw.DaysSlider:SetScript( "OnValueChanged", function (self)
-	getglobal(aw.DaysSlider:GetName() .. "Text"):SetText(format( "%i", aw.DaysSlider:GetValue() ) );
+DaysSlider = aw:createSlider(params);
+DaysSlider:SetScript( "OnValueChanged", function (self)
+	getglobal(DaysSlider:GetName() .. "Text"):SetText(format( "%i", DaysSlider:GetValue() ) );
 end);
 
 params = {};
@@ -199,5 +212,5 @@ aw.panel:Hide()
 
 --Panel functions
 aw.panel.okay = function (self) SaveOptions(); end;
-aw.panel.default = function (self) LoadOptions(); end;
+aw.panel.default = function (self) aw:SetDefaults(); aw:LoadOptions(); end;
 

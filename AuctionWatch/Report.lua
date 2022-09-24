@@ -1,6 +1,5 @@
 --aw namespace variable
 local _, aw = ...;
-
 local currentSort;
 
 local TimePassed = function (t)

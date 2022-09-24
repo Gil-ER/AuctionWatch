@@ -2,7 +2,7 @@
 ## Title: Auction Watch
 ## Notes: Reminds you to log back into a toon after posting auction(s).
 ## DefaultState: enabled
-## Version: 9.2.03
+## Version: 9.2.04
 ## Author: Gildina
 
 ## SavedVariables: aWatchDB

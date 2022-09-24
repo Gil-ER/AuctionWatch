@@ -67,3 +67,8 @@ function aw:GetCount(t)
 	return 0;	--something was nil so return 0	
 end;
 
+function aw:SetDefaults()
+	for key, value in pairs(defaultSettings) do
+		aw:dbSaveSetting(key, value);
+	end;
+end;
