@@ -3,49 +3,40 @@ local addon, aw = ...;
 local params = {};
 
 function aw:LoadOptions() 
-	aw.ReportChat:SetChecked( aw:GetChat() );
-	aw.ReportWindow:SetChecked( aw:GetWindow() );
-	aw.ReportChat_Old:SetChecked( aw:GetOnlyOver() );
-	aw.ReportWindow_Old:SetChecked(  aw:GetWindowOnlyOver() );
-	aw.ByDate:SetChecked( aw:GetByDate() );
-	aw.ByCount:SetChecked( not aw:GetByDate() );
-	aw.SortAsc:SetChecked( aw:GetAsc() );
-	aw.SortDesc:SetChecked( not aw:GetAsc() );
-	aw.DaysSlider:SetValue( tonumber(aw:GetDays()) );
+	aw.ReportChat:SetChecked( aw:GetSetting("Chat") );
+	aw.ReportWindow:SetChecked( aw:GetSetting("Window") );
+	aw.ReportChat_Old:SetChecked( aw:GetSetting("OnlyOver") );
+	aw.ReportWindow_Old:SetChecked(  aw:GetSetting("SetWindowOnlyOver") );
+	aw.ByDate:SetChecked( aw:GetSetting("ByDate") );
+	aw.ByCount:SetChecked( not aw:GetSetting("ByDate") );
+	aw.SortAsc:SetChecked( aw:GetSetting("Asc") );
+	aw.SortDesc:SetChecked( not aw:GetSetting("Asc") );
+	aw.DaysSlider:SetValue( tonumber(aw:GetSetting("Days")) );
 	--show/hide the include option based on the value of the ReportChat field
 	if aw.ReportChat:GetChecked() == true then aw.ReportChat_Old:Show(); aw.ReportChat_Old_Text:Show();
-	else aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide();
-	end;
+		else aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide(); end;
 	if aw.ReportWindow:GetChecked() == true then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
-	else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide();
-	end;
-	aw.PlaySound:SetChecked(aw:GetSoundFlag() );
+		else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end;
+	aw.PlaySound:SetChecked(aw:GetSetting("PlaySound") );
 end
 
 local SaveOptions = function()
-	aw:SetChat( aw.ReportChat:GetChecked() );
-	aw:SetWindow( aw.ReportWindow:GetChecked() );
-	aw:SetOnlyOver( aw.ReportChat_Old:GetChecked() );
-	aw:SetDays( format( "%i", aw.DaysSlider:GetValue() ) );
-	aw:SetAsc( aw.SortAsc:GetChecked() );
-	aw:SetByDate( aw.ByDate:GetChecked() );
-	aw:SetWindowOnlyOver( aw.ReportWindow_Old:GetChecked() );
-	aw:SetSoundFlag(aw.PlaySound:GetChecked() );
+	aw:dbSaveSetting("Chat", aw.ReportChat:GetChecked() );	
+	aw:dbSaveSetting("OnlyOver",  aw.ReportChat_Old:GetChecked() );	
+	aw:dbSaveSetting("Window",  aw.ReportWindow:GetChecked() );
+	aw:dbSaveSetting("WinOnlyOver",  aw.ReportWindow_Old:GetChecked() );
+	aw:dbSaveSetting("Days",  format( "%i", aw.DaysSlider:GetValue() ) );
+	aw:dbSaveSetting("Asc",  aw.SortAsc:GetChecked() );
+	aw:dbSaveSetting("ByDate",  aw.ByDate:GetChecked() );
+	aw:dbSaveSetting("PlaySound", aw.PlaySound:GetChecked() );
 end
 
 function cbClicked ()
-	if aw.ReportChat:GetChecked() then 
-		aw.ReportChat_Old:Show(); aw.ReportChat_Old_Text:Show();
-	else 
-		aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide(); 
-	end; 
-		--Toggles a secondary option when the primary is selected
-	if aw.ReportWindow:GetChecked() then 
-		aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
-	else 
-		aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); 
-	end;
-	
+	if aw.ReportChat:GetChecked() then aw.ReportChat_Old:Show(); aw.ReportChat_Old_Text:Show();
+		else aw.ReportChat_Old:Hide(); aw.ReportChat_Old_Text:Hide(); end; 
+	--Toggles a secondary option when the primary is selected
+	if aw.ReportWindow:GetChecked() then aw.ReportWindow_Old:Show(); aw.ReportWindow_Old_Text:Show();
+		else aw.ReportWindow_Old:Hide(); aw.ReportWindow_Old_Text:Hide(); end;	
 end
 
 --Create the ConfigPanel ********************************************************************************
@@ -199,7 +190,6 @@ params = {
 	step = 1
 }
 aw.DaysSlider = aw:createSlider(params);
---aw.DaysSlider:SetValue(aw:GetDays());
 aw.DaysSlider:SetScript( "OnValueChanged", function (self)
 	getglobal(aw.DaysSlider:GetName() .. "Text"):SetText(format( "%i", aw.DaysSlider:GetValue() ) );
 end);
@@ -209,5 +199,5 @@ aw.panel:Hide()
 
 --Panel functions
 aw.panel.okay = function (self) SaveOptions(); end;
-aw.panel.default = function (self) aw:DefaultSettings(); LoadOptions(); end;
+aw.panel.default = function (self) LoadOptions(); end;
 
