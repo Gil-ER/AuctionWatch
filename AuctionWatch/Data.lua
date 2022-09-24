@@ -1,6 +1,11 @@
 --aw namespace variable
 local _, aw = ...;
 
+function AuctionWatchGetAuctions()
+	--Global function that returns the number of active auctions
+	return aw.auctionCount;
+end;
+
 local defaultSettings = { 	
 	["Chat"] = false; 			--Don't list to chat
 	["OnlyOver"] = true; 		--Only list with expired auctions
