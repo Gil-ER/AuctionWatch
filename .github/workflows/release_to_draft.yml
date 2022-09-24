@@ -44,5 +44,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./AuctionWatch.zip
-          asset_name: AuctionWatch.zip
+          asset_name: AuctionWatch-v${{ github.event.inputs.tag }}.zip
           asset_content_type: application/zip
