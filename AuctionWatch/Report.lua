@@ -112,7 +112,7 @@ function aw:ReportAuctionsToWindow( flag )
 	local auc = {};
 	local i = 1;
 	local t = time() - (aw:GetSetting("Days") * 24 * 60 * 60)	--days to seconds before current time
-	if aWatchDB ~= nil then								--read all auction data into a local table
+	if aWatchDB ~= nil and aWatchDB.Auctions ~= nil then								--read all auction data into a local table
 		for cName, cTable in pairs(aWatchDB["Auctions"]) do
 			auc[#auc + 1] = {["name"] = cName; ["count"] = cTable["count"]; ["time"] = cTable["time"] }
 		end;

@@ -137,7 +137,7 @@ params = {
 	width = w,
 	height = 30,
 	caption	= "Remove Toon",
-	ttip = "Swap the field being sorted\nNumber of auctions/time since last visit.",
+	ttip = "Remove a toon from the database.\nIf you remove a toon in error opening/nthe Auction House from that toon /nwill correct this.",
 	pressFunc = function (self) aw:RemoveToon(); end;
 }
 aw:createButton(params);
@@ -150,8 +150,8 @@ params = {
 	yOff = 10,
 	width = w,
 	height = 30,
-	caption	= "Open Config.",
-	ttip = "Swap the field being sorted\nNumber of auctions/time since last visit.",
+	caption	= "Disabled",
+	ttip = "Options disabled while I deal\nwith changes made to the way\n'Options Pages' works in Dragonflight.",
 	pressFunc = function (self) InterfaceOptionsFrame_OpenToCategory(aw.panel);
 								InterfaceOptionsFrame_OpenToCategory(aw.panel); end;
 }

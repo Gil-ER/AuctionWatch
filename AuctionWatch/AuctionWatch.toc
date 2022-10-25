@@ -1,8 +1,8 @@
-## Interface: 90207
+## Interface: 100000
 ## Title: Auction Watch
 ## Notes: Reminds you to log back into a toon after posting auction(s).
 ## DefaultState: enabled
-## Version: 9.2.04
+## Version: 10.0.0
 ## Author: Gildina
 
 ## SavedVariables: aWatchDB
@@ -13,4 +13,3 @@ Report.lua
 RemoveToon.lua
 AuctionWatch.lua
 Output.lua
-Config.lua
