@@ -13,3 +13,4 @@ Report.lua
 RemoveToon.lua
 AuctionWatch.lua
 Output.lua
+Config.lua
