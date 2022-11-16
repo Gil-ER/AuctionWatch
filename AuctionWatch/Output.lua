@@ -150,10 +150,11 @@ params = {
 	yOff = 10,
 	width = w,
 	height = 30,
-	caption	= "Disabled",
-	ttip = "Options disabled while I deal\nwith changes made to the way\n'Options Pages' works in Dragonflight.",
+	caption	= "Options",
+	ttip = "Control where reports go and \nthe way they are displayed.",
 	pressFunc = function (self) InterfaceOptionsFrame_OpenToCategory(aw.panel);
-								InterfaceOptionsFrame_OpenToCategory(aw.panel); end;
+								InterfaceOptionsFrame_OpenToCategory(aw.panel); 
+				end;
 }
 aw:createButton(params);
 params = {
