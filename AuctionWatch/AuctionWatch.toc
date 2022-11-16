@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 ## Interface: 100002
-=======
-## Interface: 100000
->>>>>>> d42a197ef3e8cf1c15a651f67384cf8f9253af87
 ## Title: Auction Watch v10.0.1
 ## Notes: Reminds you to log back into a toon after posting auction(s).
 ## DefaultState: enabled
