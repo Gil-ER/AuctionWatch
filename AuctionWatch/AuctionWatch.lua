@@ -53,22 +53,19 @@ function frame:OnEvent(event, arg1, arg2)
 		--Report to chat
 		if aw:GetSetting("Chat") then aw:ReportAuctionsToChat(); end;		
 		aw:LoadOptions();
-	end 
-	
+	end;	
+		
 	if event == "OWNED_AUCTIONS_UPDATED" then
 		aw.auctionCount = C_AuctionHouse.GetNumOwnedAuctions();
-	end
+	end;
 	
 	if event == "AUCTION_HOUSE_AUCTION_CREATED"  then	
-		--Posting in the default UI doesn't call OWNED_AUCTIONS_UPDATED
-		--C_AuctionHouse.GetNumOwnedAuctions() isn't incremented here
-		--This workaround will count an extra auction if you post a commodity when you already have some posted
-		if AuctionHouseFrame.ItemSellFrame:IsVisible() == true then aw.auctionCount = aw.auctionCount + 1; end;
-	end
+		aw.auctionCount = aw.auctionCount + 1;
+	end;
 		
 	if event == "AUCTION_HOUSE_CLOSED" then
 		if aw.auctionCount > 0 then	aw:UpdateToon(aw.ID); else aw:RemoveToonFromDB(aw.ID); end;
-	end
+	end;
 end	
 frame:SetScript("OnEvent", frame.OnEvent);
 
