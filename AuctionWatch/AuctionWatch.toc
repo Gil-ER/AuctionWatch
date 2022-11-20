@@ -1,5 +1,5 @@
 ## Interface: 100002
-## Title: Auction Watch v10.0.3
+## Title: Auction Watch
 ## Notes: Reminds you to log back into a toon after posting auction(s).
 ## DefaultState: enabled
 ## Version: 10.0.3
