@@ -6,18 +6,6 @@ local list = {};	--table of strings to display
 aw.button = {};		--array of buttons created at the bottom of the output frame
 local currentIndex = 1;
 
-function aw:colorString(c, str)
-	local color = 	{ ["red"] = "FF0000", ["green"]  = "00FF00" }
-	if str == nil then str = "nil"; end;
-	return string.format("|cff%s%s|r", color[c], str);
-end
-
-function aw:myPrint( ... )
-    local prefix = string.format("|cff%s%s|r", "0088EE", "Auction Watch: ");	
-	local message = string.join(" ", ...);
-	print(prefix,  message);
-end
-
 --Create strings and position for form info
 local CreateStringTable = function ()
 	for i = 1, 20 do

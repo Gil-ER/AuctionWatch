@@ -1,6 +1,18 @@
 local addon, aw = ...;
 
 --**********************************************************************************
+--	Utility functions
+--**********************************************************************************
+function aw:colorString(c, str)
+	local color = 	{ ["red"] = "RED_FONT_COLOR:", ["green"]  = "GREEN_FONT_COLOR:" }
+	if str == nil then str = "nil"; end;
+	return ("\124cn" .. color[c] .. str);
+end;
+function aw:myPrint( ... )
+	print("\124cFF0088FFAuction Watch: ",  ...);
+end;
+
+--**********************************************************************************
 --	Checkbox widget
 --**********************************************************************************
 local frameCount = 0;
@@ -118,3 +130,54 @@ function aw:createSlider(opts)
 	slide:SetValueStep(opts.step)
 	return slide;
 end
+
+--**********************************************************************************
+--	Scroll Window widget
+--**********************************************************************************
+function aw:createScrollFrame(parent)
+	local frameHolder;
+	 
+	-- create the frame that will hold all other frames/objects:
+	local self = frameHolder or CreateFrame("Frame", nil, parent); -- re-size this to whatever size you wish your ScrollFrame to be, at this point
+	self:ClearAllPoints();
+	self:SetPoint("TOPLEFT", parent, "TOPLEFT", 10, -30);
+	self:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", -10, 60);
+		
+	-- now create the template Scroll Frame (this frame must be given a name so that it can be looked up via the _G function (you'll see why later on in the code)
+	self.scrollframe = self.scrollframe or CreateFrame("ScrollFrame", "ANewScrollFrame", self, "UIPanelScrollFrameTemplate");
+	 
+	-- create the standard frame which will eventually become the Scroll Frame's scrollchild
+	-- importantly, each Scroll Frame can have only ONE scrollchild
+	self.scrollchild = self.scrollchild or CreateFrame("Frame"); -- not sure what happens if you do, but to be safe, don't parent this yet (or do anything with it)
+	 
+	-- define the scrollframe's objects/elements:
+	local scrollbarName = self.scrollframe:GetName()
+	self.scrollbar = _G[scrollbarName.."ScrollBar"];
+	self.scrollupbutton = _G[scrollbarName.."ScrollBarScrollUpButton"];
+	self.scrolldownbutton = _G[scrollbarName.."ScrollBarScrollDownButton"];
+	 
+	-- all of these objects will need to be re-anchored (if not, they appear outside the frame and about 30 pixels too high)
+	self.scrollupbutton:ClearAllPoints();
+	self.scrollupbutton:SetPoint("TOPRIGHT", self.scrollframe, "TOPRIGHT", 3, -2);
+	 
+	self.scrolldownbutton:ClearAllPoints();
+	self.scrolldownbutton:SetPoint("BOTTOMRIGHT", self.scrollframe, "BOTTOMRIGHT", 3, 2);
+	 
+	self.scrollbar:ClearAllPoints();
+	self.scrollbar:SetPoint("TOP", self.scrollupbutton, "BOTTOM", 0, -2);
+	self.scrollbar:SetPoint("BOTTOM", self.scrolldownbutton, "TOP", 0, 2);
+	 
+	-- now officially set the scrollchild as your Scroll Frame's scrollchild (this also parents self.scrollchild to self.scrollframe)
+	-- IT IS IMPORTANT TO ENSURE THAT YOU SET THE SCROLLCHILD'S SIZE AFTER REGISTERING IT AS A SCROLLCHILD:
+	self.scrollframe:SetScrollChild(self.scrollchild);
+	 
+	-- set self.scrollframe points to the first frame that you created (in this case, self)
+	self.scrollframe:SetAllPoints(self);
+	 
+	-- now that SetScrollChild has been defined, you are safe to define your scrollchild's size.
+	self.scrollchild:SetSize(self.scrollframe:GetWidth(), ( self.scrollframe:GetHeight() * 8 ));
+	
+	return self.scrollchild;
+end;
+
+
