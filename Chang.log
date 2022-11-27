@@ -1,3 +1,18 @@
+10.0.4
+* Fixed scroll bar so it displays properly
+
+10.0.3
+* Fixed a bug were auctions were not counting
+
+10.0.2
+* 10.0.2 Update
+
+10.0.1
+* Fixed Options page
+
+10.0.0
+* 10.0.0 Update
+
 9.2.04
 * Window now closes with <esc> key press
 * Minor code changes
