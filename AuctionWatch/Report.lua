@@ -102,17 +102,15 @@ function aw:ReportAuctionsToChat()
 	end
 end
 
-function aw:ReportAuctionsToWindow( flag )
+function aw:GetAuctions( flag )
 	--List a report to window of toons with auctions
 	local byDate = aw:GetSetting("ByDate");
 	if flag == nil then currentSort = byDate; end;
 	if flag == true then currentSort = not currentSort; byDate = currentSort; end;
-	aw:ClearAllText();
-	aw.Output:Show();
 	local auc = {};
 	local i = 1;
 	local t = time() - (aw:GetSetting("Days") * 24 * 60 * 60)	--days to seconds before current time
-	if aWatchDB ~= nil and aWatchDB.Auctions ~= nil then								--read all auction data into a local table
+	if aWatchDB and aWatchDB.Auctions then								--read all auction data into a local table
 		for cName, cTable in pairs(aWatchDB["Auctions"]) do
 			auc[#auc + 1] = {["name"] = cName; ["count"] = cTable["count"]; ["time"] = cTable["time"] }
 		end;
@@ -132,13 +130,16 @@ function aw:ReportAuctionsToWindow( flag )
 			table.sort (auc, function(a,b) return a.count > b.count; end);
 		end	
 	end
-	local row = 1
-	aw.auctions:Clear();
+	local c, n, d, h, m = "", "", "", "", "";
 	for k, v in pairs(auc) do
 		local days, hours, mins = TimePassed(v.time);
 		local dStr = "";		
-		if days > 0 then if days == 1 then dStr = days .. " day"; else dStr = days .. " days"; end; end;
-		aw.auctions:AddLine(v.count, v.name, dStr, hours, mins);
+		if days > 0 then if days == 1 then dStr = days .. " day"; else dStr = days .. " days"; end; end;		
+		c = c .. v.count .. "\n";
+		n = n .. v.name .. "\n";
+		d = d .. dStr .. "\n";
+		h = h .. hours .. ":\n";
+		m = m .. mins .. "\n";
 	end;
-	aw.auctions:Show();
+	return c, n, d, h, m;
 end

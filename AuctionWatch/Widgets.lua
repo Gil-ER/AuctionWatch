@@ -53,7 +53,7 @@ function aw:createButton(opts)
 	--Add a tooltip if one was provided
 	if (opts.ttip ~= nil) or (opts.ttip ~= "") then 
 		btn:SetScript("OnEnter", function()
-			GameTooltip:SetOwner(btn, "LEFT");
+			GameTooltip:SetOwner(btn, "TOP");
 			GameTooltip:AddLine(opts.ttip);
 			GameTooltip:Show();
 		end);
@@ -140,11 +140,11 @@ function aw:createScrollFrame(parent)
 	-- create the frame that will hold all other frames/objects:
 	local self = frameHolder or CreateFrame("Frame", nil, parent); -- re-size this to whatever size you wish your ScrollFrame to be, at this point
 	self:ClearAllPoints();
-	self:SetPoint("TOPLEFT", parent, "TOPLEFT", 10, -30);
+	self:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, -40);
 	self:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", -10, 60);
 		
 	-- now create the template Scroll Frame (this frame must be given a name so that it can be looked up via the _G function (you'll see why later on in the code)
-	self.scrollframe = self.scrollframe or CreateFrame("ScrollFrame", "ANewScrollFrame", self, "UIPanelScrollFrameTemplate");
+	self.scrollframe = self.scrollframe or CreateFrame("ScrollFrame", "awOutputScrollFrame", self, "UIPanelScrollFrameTemplate");
 	 
 	-- create the standard frame which will eventually become the Scroll Frame's scrollchild
 	-- importantly, each Scroll Frame can have only ONE scrollchild
@@ -175,7 +175,7 @@ function aw:createScrollFrame(parent)
 	self.scrollframe:SetAllPoints(self);
 	 
 	-- now that SetScrollChild has been defined, you are safe to define your scrollchild's size.
-	self.scrollchild:SetSize(self.scrollframe:GetWidth(), ( self.scrollframe:GetHeight() * 8 ));
+	self.scrollchild:SetSize(self.scrollframe:GetWidth(), ( self.scrollframe:GetHeight() * 4 ));
 	
 	return self.scrollchild;
 end;

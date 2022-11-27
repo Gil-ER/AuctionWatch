@@ -1,181 +1,168 @@
 --aw namespace variable
 local addon, aw = ...;
 
-local t = {};		--table of FontStrings placed on the frame
-local list = {};	--table of strings to display
-aw.button = {};		--array of buttons created at the bottom of the output frame
-local currentIndex = 1;
-
---Create strings and position for form info
-local CreateStringTable = function ()
-	for i = 1, 20 do
-		local row = -15 + (-15 * i);		--row spacing
-		t[i] = {	[1] = aw.Output:CreateFontString("awText_" .. i .."1", "OVERLAY", "GameFontNormal"), 
-					[2] = aw.Output:CreateFontString(nil, "OVERLAY", "GameFontNormal"),
-					[3] = aw.Output:CreateFontString(nil, "OVERLAY", "GameFontNormal"),
-					[4] = aw.Output:CreateFontString(nil, "OVERLAY", "GameFontNormal"),
-					[5] = aw.Output:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-			};
-		t[i][1]:SetPoint("TOPLEFT", 15, row);
-		t[i][1]:SetWidth(35);
-		t[i][1]:SetJustifyH("RIGHT");
-		
-		t[i][2]:SetPoint("TOPLEFT", t[i][1], "TOPRIGHT", 10, 0);	
-		t[i][2]:SetWidth(190);
-		t[i][2]:SetJustifyH("LEFT");
-		
-		t[i][3]:SetPoint("TOPLEFT", t[i][2], "TOPRIGHT", 0, 0);
-		t[i][3]:SetWidth(55);
-		t[i][3]:SetJustifyH("LEFT");
-		
-		t[i][4]:SetPoint("TOPLEFT", t[i][3], "TOPRIGHT", 0, 0);
-		t[i][4]:SetWidth(30);
-		t[i][4]:SetJustifyH("RIGHT");		
-
-		t[i][5]:SetPoint("TOPLEFT", t[i][4], "TOPRIGHT", 0, 0);
-		t[i][5]:SetWidth(40);
-		t[i][5]:SetJustifyH("LEFT");		
-	end;
-	t[21] = { [1] = aw.Output:CreateFontString(nil, "OVERLAY", "GameFontNormal") };
-	t[21][1]:SetPoint("TOPLEFT", 15, -15 * 23);
-	t[21][1]:SetText("/aw or /auctionwatch to show this report.");
-end 
-
-function aw:ClearAllText()
-	for i = 1, 20 do		--20 lines
-		for j = 1, 5 do		--5 positions
-			t[i][j]:SetText("");
-		end
-	end
-end
-
-aw.auctions = {};
-function aw.auctions:Clear()
-	list = {};
-end
-
-function aw.auctions:AddLine(col1, col2, col3, col4, col5)
-	local idx = #list + 1
-	list[idx] = { [1] = col1; [2] = col2; [3] = col3; [4] = col4; [5] = col5 };	
-end
-
-function aw.auctions:Show(idx)
-	if idx == nil then idx = 1; end;
-	if aw.slider == nil then return; end;
-	if #list < 1 then return; end;
-	aw:ClearAllText();
-	aw.slider:SetMinMaxValues(1, #list);
-	aw.slider:SetValue(idx);
-	if idx > #list then idx = #list; end;
-	for row = 0, 19 do
-		t[row + 1][1]:SetText(list[idx + row][1]);
-		t[row + 1][2]:SetText(list[idx + row][2]);
-		t[row + 1][3]:SetText(list[idx + row][3]);
-		t[row + 1][4]:SetText(list[idx + row][4] .. ":");
-		t[row + 1][5]:SetText(list[idx + row][5]);
-		if idx + row == #list then return; end;
-	end
-end
-
-function aw:GetListedToon(idx)
-	return t[idx][2]:GetText()
-end
-
+local lineSpacing = 6;
 --**************************************************************************
 -- Output frame
 --**************************************************************************
-local params = {
-	title = "Last visit to the auction house",
-	name = "AuctionWatchReportFrame",
-	anchor = "CENTER",
-	parent = UIParent,
-	relFrame = UIParent,
-	relPoint = "CENTER",
-	xOff = 0,
-	yOff = 0,
-	width = 375,
-	height = 400,
-	isMovable = true
-}
-aw.Output = aw:createFrame(params);						--Create the Frame
-CreateStringTable();									--Create a string grid to display the output 
---Add the buttons and handlers
-local w = (params.width -20) / 3;
-params = {
-	anchor = "BOTTOMRIGHT",
-	parent = aw.Output,
-	relFrame = aw.Output,
-	relPoint = "BOTTOMRIGHT",
-	xOff = -10,
-	yOff = 10,
-	width = w,
-	height = 30,
-	caption	= "Swap Sort",
-	ttip = "Swap the field being sorted\nNumber of auctions/time since last visit.",
-	pressFunc = function (self) aw:ReportAuctionsToWindow(true); end;
-}
-aw:createButton(params);
-params = {
-	anchor = "BOTTOMRIGHT",
-	parent = aw.Output,
-	relFrame = aw.Output,
-	relPoint = "BOTTOMRIGHT",
-	xOff = -10 - w,
-	yOff = 10,
-	width = w,
-	height = 30,
-	caption	= "Remove Toon",
-	ttip = "Remove a toon from the database.\nIf you remove a toon in error opening/nthe Auction House from that toon /nwill correct this.",
-	pressFunc = function (self) aw:RemoveToon(); end;
-}
-aw:createButton(params);
-params = {
-	anchor = "BOTTOMRIGHT",
-	parent = aw.Output,
-	relFrame = aw.Output,
-	relPoint = "BOTTOMRIGHT",
-	xOff = -10 - (2 * w),
-	yOff = 10,
-	width = w,
-	height = 30,
-	caption	= "Options",
-	ttip = "Control where reports go and \nthe way they are displayed.",
-	pressFunc = function (self) InterfaceOptionsFrame_OpenToCategory(aw.panel);
-								InterfaceOptionsFrame_OpenToCategory(aw.panel); 
-				end;
-}
-aw:createButton(params);
-params = {
-	name = nil,				--globally unique, only change if you need it
-	parent = aw.Output,			--parent frame
-	relFrame = aw.Output,		--relative control for positioning
-	anchor = "TOPRIGHT", 		--anchor point of this form
-	relPoint = "TOPRIGHT",		--relative point for positioning	
-	xOff = -5,					--x offset from relative point
-	yOff = -25,					--y offset from relative point
-	width = 10,					--frame width
-	height = 310,				--frame height
-	orientation = "VERTICAL",	--VERTICAL (side)
-	min = "",
-	max = "",
-	step = 1
-}
-aw.slider = aw:createSlider(params);
-aw.slider:SetScript( "OnValueChanged", function ()
-	local i = tonumber( format( "%.0f", aw.slider:GetValue() ) );	--convert to integer
-	--Only update the list if the number changed
-	if i ~= currentIndex then			
-		currentIndex = i;
-		aw.auctions:Show(i);
-	end;
-end);
-aw.Output:SetScript( "OnMouseWheel", function (self, direction)
-	local pos = tonumber( format( "%.0f", aw.slider:GetValue() ) );	--convert to integer
-	local sMin, sMax = aw.slider:GetMinMaxValues();
-	if pos == sMax or pos == sMax then return; end;
-	if direction == 1 then aw.slider:SetValue( pos - 1 ); end;	
-	if direction == -1 then aw.slider:SetValue( pos + 1 ); end;
-end);
+function aw:OutputFrame()
+	local params = {
+		title = "Last visit to the auction house",
+		name = "AuctionWatchReportFrameNew",
+		anchor = "TOPLEFT",
+		parent = UIParent,
+		relFrame = UIParent,
+		relPoint = "TOPLEFT",
+		xOff = 0,
+		yOff = 0,
+		width = 425,
+		height = 400,
+		isMovable = true
+	}
+	aw.OutputList = aw:createFrame(params);						--Create the Frame
+	local ScrollWindow = aw:createScrollFrame(aw.OutputList)
 
-aw.Output:Hide();
+	local txtAuctions = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
+	txtAuctions:SetPoint("TOPLEFT", ScrollWindow, "TOPLEFT", 20, 0);
+	txtAuctions:SetWidth(35);
+	txtAuctions:SetSpacing(lineSpacing);
+	txtAuctions:SetJustifyH("RIGHT");
+	txtAuctions:SetJustifyV("TOP");
+	txtAuctions:EnableMouse(true);
+	txtAuctions:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(ScrollWindow, "ANCHOR_CURSOR");
+		GameTooltip:SetText("Total number of\nauctions listed.");
+		GameTooltip:Show();
+	end)
+	txtAuctions:SetScript("OnLeave", function() GameTooltip:Hide(); end)
+
+	local txtName = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
+	txtName:SetPoint("TOPLEFT", txtAuctions, "TOPRIGHT", 15, 0);
+	txtName:SetWidth(185);
+	txtName:SetSpacing(lineSpacing);
+	txtName:SetJustifyH("LEFT");
+	txtName:SetJustifyV("TOP");
+
+	local txtDay = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
+	txtDay:SetPoint("TOPLEFT", txtName, "TOPRIGHT", 15, 0);
+	txtDay:SetWidth(55);
+	txtDay:SetSpacing(lineSpacing);
+	txtDay:SetJustifyH("RIGHT");
+	txtDay:SetJustifyV("TOP");
+	txtDay:EnableMouse(true);
+	txtDay:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(ScrollWindow, "ANCHOR_CURSOR");
+		GameTooltip:SetText("Time since you\nlast visited the\nauction house.");
+		GameTooltip:Show();
+	end)
+	txtDay:SetScript("OnLeave", function() GameTooltip:Hide(); end)
+
+	local txtHrs = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
+	txtHrs:SetPoint("TOPLEFT", txtDay, "TOPRIGHT", 15, 0);
+	txtHrs:SetWidth(30);
+	txtHrs:SetSpacing(lineSpacing);
+	txtHrs:SetJustifyH("RIGHT");
+	txtHrs:SetJustifyV("TOP");
+	txtHrs:EnableMouse(true);
+	txtHrs:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(ScrollWindow, "ANCHOR_CURSOR");
+		GameTooltip:SetText("Time since you\nlast visited the\nauction house.");
+		GameTooltip:Show();
+	end)
+	txtHrs:SetScript("OnLeave", function() GameTooltip:Hide(); end)
+
+	local txtMin = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
+	txtMin:SetPoint("TOPLEFT", txtHrs, "TOPRIGHT");
+	txtMin:SetWidth(40);
+	txtMin:SetSpacing(lineSpacing);
+	txtMin:SetJustifyH("LEFT");
+	txtMin:SetJustifyV("TOP");
+	txtMin:EnableMouse(true);
+	txtMin:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(ScrollWindow, "ANCHOR_CURSOR");
+		GameTooltip:SetText("Time since you\nlast visited the\nauction house.");
+		GameTooltip:Show();
+	end)
+	txtMin:SetScript("OnLeave", function() GameTooltip:Hide(); end)
+
+	local footer = aw.OutputList:CreateFontString(nil, "OVERLAY", "GameFontNormal");
+	footer:SetPoint("BOTTOMLEFT", 20, 45);
+	footer:SetText("/aw or /auctionwatch to show this report.");
+
+	--Add the buttons and handlers
+	local w = (params.width -20) / 3;
+	params = {
+		anchor = "BOTTOMRIGHT",
+		parent = aw.OutputList,
+		relFrame = aw.OutputList,
+		relPoint = "BOTTOMRIGHT",
+		xOff = -10,
+		yOff = 10,
+		width = w,
+		height = 30,
+		caption	= "Swap Sort",
+		ttip = "Swap the field being sorted\nNumber of auctions or the \ntime of your last visit to the\nAuction House.",
+		pressFunc = function (self) 
+			local a, n, d, h, m = aw:GetAuctions( true );
+			txtAuctions:SetText(a);
+			txtName:SetText(n);
+			txtDay:SetText(d);
+			txtHrs:SetText(h);
+			txtMin:SetText(m);
+		end;
+	}
+	aw:createButton(params);
+	params = {
+		anchor = "BOTTOMRIGHT",
+		parent = aw.OutputList,
+		relFrame = aw.OutputList,
+		relPoint = "BOTTOMRIGHT",
+		xOff = -10 - w,
+		yOff = 10,
+		width = w,
+		height = 30,
+		caption	= "Remove Toon",
+		ttip = "Remove a toon from the database.\nIf you remove a toon in error opening\nthe Auction House from that toon\nwill correct this.",
+		pressFunc = function (self) aw:RemoveToon(); end;
+	}
+	aw:createButton(params);
+	params = {
+		anchor = "BOTTOMRIGHT",
+		parent = aw.OutputList,
+		relFrame = aw.OutputList,
+		relPoint = "BOTTOMRIGHT",
+		xOff = -10 - (2 * w),
+		yOff = 10,
+		width = w,
+		height = 30,
+		caption	= "Options",
+		ttip = "Control where reports go and \nthe way they are displayed.",
+		pressFunc = function (self) InterfaceOptionsFrame_OpenToCategory(aw.panel);
+									InterfaceOptionsFrame_OpenToCategory(aw.panel); 
+					end;
+	}
+	aw:createButton(params);
+	
+	aw.OutputList:SetScript("OnShow", function(self)
+		local a, n, d, h, m = aw:GetAuctions();
+		txtAuctions:SetText(a);
+		txtName:SetText(n);
+		txtDay:SetText(d);
+		txtHrs:SetText(h);
+		txtMin:SetText(m);		
+	end)
+	aw.OutputList:Hide();
+end;
+
+function aw:GetListedToon()
+	local i = 1;
+	local toons = {};
+	local name, list = "", txtName:GetText();
+	while list do
+		name, list = strsplit("\n", list, 2);
+		toons[i] = name;
+		i = i + 1;
+	end;
+	return toons;
+end
 

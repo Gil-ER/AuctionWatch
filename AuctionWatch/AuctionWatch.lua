@@ -7,7 +7,7 @@ aw.auctionCount = 0;
 SLASH_AUCTIONWATCH1 = "/auctionwatch";
 SLASH_AUCTIONWATCH2 = "/aw";
 SlashCmdList.AUCTIONWATCH = function(msg)
-	aw:ReportAuctionsToWindow();
+	aw.OutputList:Show();
 end
 
 -- **********************************************************************
@@ -30,10 +30,13 @@ function frame:OnEvent(event, arg1, arg2)
 			aw:myPrint(aw:colorString("red", "*******************************************") );
 		end;
 		tinsert(UISpecialFrames, "AuctionWatchReportFrame");	--Close with ESC key
+		tinsert(UISpecialFrames, "AuctionWatchReportFrameNew");		
 		frame:UnregisterEvent("SPELLS_CHANGED");				--Only run once
 	end;
 	
 	if event == "PLAYER_LOGIN" then 
+		aw:ConfigFrame();
+		aw:OutputFrame();
 		aw.auctionCount = aw:GetCount(aw.ID);
 		--Single line report on login
 		if aw:ExpiredAuctions() then 
@@ -44,10 +47,10 @@ function frame:OnEvent(event, arg1, arg2)
 		--Report to Window
 		if aw:GetSetting("Window") then 
 			if aw:GetSetting("WinOnlyOver") then
-				if  aw:ExpiredAuctions() then aw:ReportAuctionsToWindow(); end;
+				if  aw:ExpiredAuctions() then aw.OutputList:Show(); end;
 			else
 				print("always report")
-				aw:ReportAuctionsToWindow(); 
+				aw.OutputList:Show();
 			end;
 		end;
 		--Report to chat

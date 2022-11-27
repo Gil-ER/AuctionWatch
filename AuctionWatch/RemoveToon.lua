@@ -10,7 +10,8 @@ local ConfirmDelete = function(toon)
 		button2 = "No",
 		OnAccept = function()
 			aw:RemoveToonFromDB(toon);
-			aw:ReportAuctionsToWindow();
+			aw.OutputList:Hide();
+			aw.OutputList:Show();
 		end,
 		timeout = 0,
 		whileDead = true,
@@ -24,13 +25,13 @@ local AddItem = function(text, func)
     table.insert(menuList, info)
 end
 
+local l = CreateFrame("Frame", "RemoveToonFrame", UIParent, "UIDropDownMenuTemplate");
 function aw:RemoveToon()	
-    menuList = {};		--Clear old data
-	local l = CreateFrame("Frame", "RemoveToonFrame", UIParent, "UIDropDownMenuTemplate");
-
-	for i = 1, 20 do
-		local t = aw:GetListedToon(i);
-		if t ~= nil then AddItem(t, function() ConfirmDelete(t); end); end;		
+    menuList = {};		--Clear old data.	
+	local toons = aw:GetListedToon();
+	for i = 1, #toons do
+		local t = toons[i];
+		if t ~= nil and t > "" then AddItem(t, function() ConfirmDelete(t); end); end;
 	end;
 	AddItem('Close', function() end);	
 	EasyMenu(menuList, l, "cursor", 0, 0, "MENU")	
