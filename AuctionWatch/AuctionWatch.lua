@@ -35,7 +35,7 @@ function frame:OnEvent(event, arg1, arg2)
 	end;
 	
 	if event == "PLAYER_LOGIN" then 
-		aw:ConfigFrame();
+		aw:ConfigFrame();	
 		aw:OutputFrame();
 		aw.auctionCount = aw:GetCount(aw.ID);
 		--Single line report on login
@@ -49,13 +49,11 @@ function frame:OnEvent(event, arg1, arg2)
 			if aw:GetSetting("WinOnlyOver") then
 				if  aw:ExpiredAuctions() then aw.OutputList:Show(); end;
 			else
-				print("always report")
 				aw.OutputList:Show();
 			end;
 		end;
 		--Report to chat
-		if aw:GetSetting("Chat") then aw:ReportAuctionsToChat(); end;		
-		aw:LoadOptions();
+		if aw:GetSetting("Chat") then aw:ReportAuctionsToChat(); end;	
 	end;	
 		
 	if event == "OWNED_AUCTIONS_UPDATED" then
