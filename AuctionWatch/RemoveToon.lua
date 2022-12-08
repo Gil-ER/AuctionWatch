@@ -26,9 +26,9 @@ local AddItem = function(text, func)
 end
 
 local l = CreateFrame("Frame", "RemoveToonFrame", UIParent, "UIDropDownMenuTemplate");
-function aw:RemoveToon()	
+function aw:RemoveToon(tb)	
     menuList = {};		--Clear old data.	
-	local toons = aw:GetListedToon();
+	local toons = aw:GetListedToon(tb);
 	for i = 1, #toons do
 		local t = toons[i];
 		if t ~= nil and t > "" then AddItem(t, function() ConfirmDelete(t); end); end;
