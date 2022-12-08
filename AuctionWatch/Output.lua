@@ -123,7 +123,7 @@ function aw:OutputFrame()
 		height = 30,
 		caption	= "Remove Toon",
 		ttip = "Remove a toon from the database.\nIf you remove a toon in error opening\nthe Auction House from that toon\nwill correct this.",
-		pressFunc = function (self) aw:RemoveToon(); end;
+		pressFunc = function (self) aw:RemoveToon(txtName); end;
 	}
 	aw:createButton(params);
 	params = {
@@ -154,10 +154,10 @@ function aw:OutputFrame()
 	aw.OutputList:Hide();
 end;
 
-function aw:GetListedToon()
+function aw:GetListedToon(tb)
 	local i = 1;
 	local toons = {};
-	local name, list = "", txtName:GetText();
+	local name, list = "", tb:GetText();
 	while list do
 		name, list = strsplit("\n", list, 2);
 		toons[i] = name;
