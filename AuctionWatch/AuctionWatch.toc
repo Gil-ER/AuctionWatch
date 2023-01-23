@@ -1,8 +1,8 @@
-## Interface: 100002
+## Interface: 100005
 ## Title: Auction Watch
 ## Notes: Reminds you to log back into a toon after posting auctions.
 ## DefaultState: enabled
-## Version: 10.0.4
+## Version: 10.0.5
 ## Author: Gildina
 
 ## SavedVariables: aWatchDB
