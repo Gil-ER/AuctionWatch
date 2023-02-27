@@ -1,4 +1,3 @@
---aw namespace variable
 local _, aw = ...;
 
 local menuList = {};
@@ -27,7 +26,7 @@ end
 
 local l = CreateFrame("Frame", "RemoveToonFrame", UIParent, "UIDropDownMenuTemplate");
 function aw:RemoveToon(tb)	
-    menuList = {};		--Clear old data.	
+    menuList = {};		
 	local toons = aw:GetListedToon(tb);
 	for i = 1, #toons do
 		local t = toons[i];
@@ -36,5 +35,6 @@ function aw:RemoveToon(tb)
 	AddItem('Close', function() end);	
 	EasyMenu(menuList, l, "cursor", 0, 0, "MENU")	
 end
+
 
 

@@ -1,11 +1,12 @@
---aw namespace variable
-local addon, aw = ...;
+local _, aw = ...;
 
 local lineSpacing = 6;
---**************************************************************************
--- Output frame
---**************************************************************************
+local frameOpen = false;
+
+
+
 function aw:OutputFrame()
+	if frameOpen then return; end;
 	local params = {
 		title = "Last visit to the auction house",
 		name = "AuctionWatchReportFrameNew",
@@ -19,7 +20,7 @@ function aw:OutputFrame()
 		height = 400,
 		isMovable = true
 	}
-	aw.OutputList = aw:createFrame(params);						--Create the Frame
+	aw.OutputList = aw:createFrame(params);						
 	local ScrollWindow = aw:createScrollFrame(aw.OutputList)
 
 	local txtAuctions = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
@@ -89,7 +90,7 @@ function aw:OutputFrame()
 	footer:SetPoint("BOTTOMLEFT", 20, 45);
 	footer:SetText("/aw or /auctionwatch to show this report.");
 
-	--Add the buttons and handlers
+	
 	local w = (params.width -20) / 3;
 	params = {
 		anchor = "BOTTOMRIGHT",
@@ -144,13 +145,19 @@ function aw:OutputFrame()
 	aw:createButton(params);
 	
 	aw.OutputList:SetScript("OnShow", function(self)
+		
 		local a, n, d, h, m = aw:GetAuctions();
-		txtAuctions:SetText(a);
-		txtName:SetText(n);
-		txtDay:SetText(d);
-		txtHrs:SetText(h);
-		txtMin:SetText(m);		
+		txtAuctions:SetText(a);		
+		txtName:SetText(n);			
+		txtDay:SetText(d);			
+		txtHrs:SetText(h);			
+		txtMin:SetText(m);			
+		
+		self:ClearAllPoints();
+		self:SetPoint(aWatchDB.point or "TOPLEFT", UIParent, aWatchDB.relativePoint or "TOPLEFT", aWatchDB.xOfs or 0, aWatchDB.yOfs or 0);
+		self:SetFrameStrata("DIALOG");
 	end)
+	frameOpen = true;
 	aw.OutputList:Hide();
 end;
 
@@ -165,4 +172,5 @@ function aw:GetListedToon(tb)
 	end;
 	return toons;
 end
+
 
