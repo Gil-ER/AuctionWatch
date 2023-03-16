@@ -1,10 +1,8 @@
-local _, aw = ...;
+-- Edited Mar 16, 2023
 
+local addon, aw = ...;
 local lineSpacing = 6;
 local frameOpen = false;
-
-
-
 function aw:OutputFrame()
 	if frameOpen then return; end;
 	local params = {
@@ -22,7 +20,6 @@ function aw:OutputFrame()
 	}
 	aw.OutputList = aw:createFrame(params);						
 	local ScrollWindow = aw:createScrollFrame(aw.OutputList)
-
 	local txtAuctions = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
 	txtAuctions:SetPoint("TOPLEFT", ScrollWindow, "TOPLEFT", 20, 0);
 	txtAuctions:SetWidth(35);
@@ -36,14 +33,12 @@ function aw:OutputFrame()
 		GameTooltip:Show();
 	end)
 	txtAuctions:SetScript("OnLeave", function() GameTooltip:Hide(); end)
-
 	local txtName = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
 	txtName:SetPoint("TOPLEFT", txtAuctions, "TOPRIGHT", 15, 0);
 	txtName:SetWidth(185);
 	txtName:SetSpacing(lineSpacing);
 	txtName:SetJustifyH("LEFT");
 	txtName:SetJustifyV("TOP");
-
 	local txtDay = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
 	txtDay:SetPoint("TOPLEFT", txtName, "TOPRIGHT", 15, 0);
 	txtDay:SetWidth(55);
@@ -57,7 +52,6 @@ function aw:OutputFrame()
 		GameTooltip:Show();
 	end)
 	txtDay:SetScript("OnLeave", function() GameTooltip:Hide(); end)
-
 	local txtHrs = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
 	txtHrs:SetPoint("TOPLEFT", txtDay, "TOPRIGHT", 15, 0);
 	txtHrs:SetWidth(30);
@@ -71,7 +65,6 @@ function aw:OutputFrame()
 		GameTooltip:Show();
 	end)
 	txtHrs:SetScript("OnLeave", function() GameTooltip:Hide(); end)
-
 	local txtMin = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
 	txtMin:SetPoint("TOPLEFT", txtHrs, "TOPRIGHT");
 	txtMin:SetWidth(40);
@@ -85,12 +78,9 @@ function aw:OutputFrame()
 		GameTooltip:Show();
 	end)
 	txtMin:SetScript("OnLeave", function() GameTooltip:Hide(); end)
-
 	local footer = aw.OutputList:CreateFontString(nil, "OVERLAY", "GameFontNormal");
 	footer:SetPoint("BOTTOMLEFT", 20, 45);
 	footer:SetText("/aw or /auctionwatch to show this report.");
-
-	
 	local w = (params.width -20) / 3;
 	params = {
 		anchor = "BOTTOMRIGHT",
@@ -143,16 +133,13 @@ function aw:OutputFrame()
 					end;
 	}
 	aw:createButton(params);
-	
 	aw.OutputList:SetScript("OnShow", function(self)
-		
 		local a, n, d, h, m = aw:GetAuctions();
 		txtAuctions:SetText(a);		
 		txtName:SetText(n);			
 		txtDay:SetText(d);			
 		txtHrs:SetText(h);			
 		txtMin:SetText(m);			
-		
 		self:ClearAllPoints();
 		self:SetPoint(aWatchDB.point or "TOPLEFT", UIParent, aWatchDB.relativePoint or "TOPLEFT", aWatchDB.xOfs or 0, aWatchDB.yOfs or 0);
 		self:SetFrameStrata("DIALOG");
@@ -160,7 +147,6 @@ function aw:OutputFrame()
 	frameOpen = true;
 	aw.OutputList:Hide();
 end;
-
 function aw:GetListedToon(tb)
 	local i = 1;
 	local toons = {};
@@ -172,5 +158,3 @@ function aw:GetListedToon(tb)
 	end;
 	return toons;
 end
-
-

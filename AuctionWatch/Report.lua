@@ -1,6 +1,7 @@
+-- Edited Mar 16, 2023
+
 local _, aw = ...;
 local currentSort;
-
 local TimePassed = function (t)
 	local timespan = (time() - t);
 	local days = 0;
@@ -9,7 +10,6 @@ local TimePassed = function (t)
 	local d = 24*60*60		
 	local h = 60*60			
 	local m = 60			
-	
 	while timespan > d do		
 		days = days + 1;
 		timespan = timespan - d;
@@ -26,38 +26,29 @@ local TimePassed = function (t)
 	if mins == "0" then mins = "00"; end;
 	return days, hours, mins;
 end
-
 function aw:ExpiredAuctions()
-	
 	local t = time() - ( aw:GetSetting("Days") * 24 * 60 * 60 ) 
 	if aWatchDB["Auctions"] ~= nil then
 		for cName, cTable in pairs(aWatchDB["Auctions"]) do
 			if cTable["time"]  < t then 
-				
 				return true;
 			end;
 		end;
 	end;
 	return false;
 end
-
 function aw:VeryOldAuctions()
-	
-	
 	local t = time() - ( 25 * 24 * 60 * 60 ) 
 	if aWatchDB.Auctions ~= nil then
 		for cName, cTable in pairs(aWatchDB.Auctions) do
 			if cTable.time < t then 
-				
 				return true;
 			end;
 		end;
 	end;
 	return false;
 end;
-
 function aw:ReportAuctionsToChat()
-	
 	local auc = {};
 	local i = 1;
 	local t = time() - (aw:GetSetting("Days") * 24 * 60 * 60)				
@@ -72,23 +63,19 @@ function aw:ReportAuctionsToChat()
 			end;
 		end;
 	end;		
-	
 	if aw:GetSetting("ByDate") then
-		
 		if aw:GetSetting("Asc") then		
 			table.sort (auc, function(a,b) return a.time < b.time; end);
 		else
 			table.sort (auc, function(a,b) return a.time > b.time; end);
 		end;	
 	else
-		
 		if aw:GetSetting("Asc") then		
 			table.sort (auc, function(a,b) return a.count < b.count; end);
 		else
 			table.sort (auc, function(a,b) return a.count > b.count; end);
 		end;	
 	end;
-	
 	for k, v in pairs(auc) do
 		local d, h, m = TimePassed(v.time)
 		local dt = h .. ":" .. m;
@@ -100,9 +87,7 @@ function aw:ReportAuctionsToChat()
 		end
 	end
 end
-
 function aw:GetAuctions( flag )
-	
 	local byDate = aw:GetSetting("ByDate");
 	if flag == nil then currentSort = byDate; end;
 	if flag == true then currentSort = not currentSort; byDate = currentSort; end;
@@ -115,20 +100,18 @@ function aw:GetAuctions( flag )
 		end;
 	end;	
 	if byDate then
-		
 		if aw:GetSetting("Asc") then
 			table.sort (auc, function(a,b) return a.time > b.time; end);
 		else
 			table.sort (auc, function(a,b) return a.time < b.time; end);
 		end;	
 	else	
-		
 		if aw:GetSetting("Asc") then
 			table.sort (auc, function(a,b) return a.count < b.count; end);
 		else
 			table.sort (auc, function(a,b) return a.count > b.count; end);
-		end	;
-	end;
+		end	
+	end
 	local c, n, d, h, m = "", "", "", "", "";
 	for k, v in pairs(auc) do
 		local days, hours, mins = TimePassed(v.time);
@@ -141,8 +124,4 @@ function aw:GetAuctions( flag )
 		m = m .. mins .. "\n";
 	end;
 	return c, n, d, h, m;
-end;
-
-
-
-
+end

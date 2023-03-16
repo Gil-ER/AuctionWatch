@@ -1,7 +1,7 @@
+-- Edited Mar 16, 2023
+
 local _, aw = ...;
-
 local menuList = {};
-
 local ConfirmDelete = function(toon)	
 	StaticPopupDialogs["AW_CONFIRM_DELETE"] = {
 		text = "Do you really want to remove\n" .. toon .. "\nfrom this list?",
@@ -18,12 +18,10 @@ local ConfirmDelete = function(toon)
 	}	
 	StaticPopup_Show ("AW_CONFIRM_DELETE");
 end
-
 local AddItem = function(text, func)
     local info = {["text"] = text; ["func"] = func};	
     table.insert(menuList, info)
 end
-
 local l = CreateFrame("Frame", "RemoveToonFrame", UIParent, "UIDropDownMenuTemplate");
 function aw:RemoveToon(tb)	
     menuList = {};		
@@ -35,6 +33,3 @@ function aw:RemoveToon(tb)
 	AddItem('Close', function() end);	
 	EasyMenu(menuList, l, "cursor", 0, 0, "MENU")	
 end
-
-
-
