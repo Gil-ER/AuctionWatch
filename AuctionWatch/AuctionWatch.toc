@@ -5,7 +5,7 @@
 ## Version: 10.1.1
 ## Author: Gildina
 ## AddonCompartmentFunc: AuctionWatch_OnAddonCompartmentClick
-## IconTexture: Interface\Icons\inv_misc_1h_orcclansmallet_a_01
+## IconTexture: Interface\AddOns\AuctionWatch\aw.blp
 ## SavedVariables: aWatchDB
 
 Widgets.lua
