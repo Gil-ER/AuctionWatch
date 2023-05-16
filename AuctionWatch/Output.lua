@@ -133,6 +133,13 @@ function aw:OutputFrame()
 					end;
 	}
 	aw:createButton(params);
+	local iconFrame = CreateFrame("Frame", nil, aw.OutputList)
+	iconFrame:SetPoint("TOPLEFT", aw.OutputList, "TOPLEFT");
+	iconFrame:SetSize(48, 48)	
+	local iconTexture = iconFrame:CreateTexture("DIALOG")
+	iconTexture:SetSize(48, 48)
+	iconTexture:SetPoint("TOPLEFT", aw.OutputList, "TOPLEFT", -10, 5)
+	iconTexture:SetTexture("Interface\\AddOns\\AuctionWatch\\AW_Button.blp")
 	aw.OutputList:SetScript("OnShow", function(self)
 		local a, n, d, h, m = aw:GetAuctions();
 		txtAuctions:SetText(a);		
