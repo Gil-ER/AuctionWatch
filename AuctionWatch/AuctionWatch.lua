@@ -8,6 +8,9 @@ SLASH_AUCTIONWATCH2 = "/aw";
 SlashCmdList.AUCTIONWATCH = function(msg)
 	aw.OutputList:Show();
 end
+function AuctionWatch_OnAddonCompartmentClick()
+	aw.OutputList:Show();
+end;
 local frame = CreateFrame("FRAME");
 frame:RegisterEvent("SPELLS_CHANGED");
 frame:RegisterEvent("PLAYER_LOGIN");
