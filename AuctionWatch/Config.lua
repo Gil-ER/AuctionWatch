@@ -1,12 +1,12 @@
--- Edited Mar 16, 2023
+-- Edited Jun 20, 2023
 
-local _, aw = ...;
+local addon, aw = ...;
 local params = {};
 local 	ReportChat, ReportWindow, ReportChat_Old, ReportWindow_Old, 
 		ByDate, ByCount, SortAsc, SortDesc, DaysSlider, PlaySound,
 		ReportWindow_Old_Text;
 local defaultSettings = { 	
-	["Chat"] = false; 			
+	["Chat"] = false;
 	["OnlyOver"] = true; 		
 	["Window"] = true; 			
 	["WinOnlyOver"] = true;		
@@ -33,7 +33,7 @@ function aw:LoadOptions()
 end
 local SaveOptions = function()
 end
-function cbClicked ()
+local function cbClicked ()
 	if ReportChat:GetChecked() then ReportChat_Old:Show(); ReportChat_Old_Text:Show();
 		else ReportChat_Old:Hide(); ReportChat_Old_Text:Hide(); end; 
 	if ReportWindow:GetChecked() then ReportWindow_Old:Show(); ReportWindow_Old_Text:Show();

@@ -1,4 +1,4 @@
--- Edited Mar 16, 2023
+-- Edited Jun 20, 2023
 
 local addon, aw = ...;
 local lineSpacing = 6;
@@ -6,7 +6,7 @@ local frameOpen = false;
 function aw:OutputFrame()
 	if frameOpen then return; end;
 	local params = {
-		title = "Last visit to the auction house",
+		title = "Auction Watch",
 		name = "AuctionWatchReportFrameNew",
 		anchor = "TOPLEFT",
 		parent = UIParent,
@@ -19,7 +19,7 @@ function aw:OutputFrame()
 		isMovable = true
 	}
 	aw.OutputList = aw:createFrame(params);						
-	local ScrollWindow = aw:createScrollFrame(aw.OutputList)
+	local ScrollWindow = aw:createScrollFrame(aw.OutputList);
 	local txtAuctions = ScrollWindow:CreateFontString( nil, "OVERLAY", "GameFontNormal")
 	txtAuctions:SetPoint("TOPLEFT", ScrollWindow, "TOPLEFT", 20, 0);
 	txtAuctions:SetWidth(35);
@@ -81,14 +81,14 @@ function aw:OutputFrame()
 	local footer = aw.OutputList:CreateFontString(nil, "OVERLAY", "GameFontNormal");
 	footer:SetPoint("BOTTOMLEFT", 20, 45);
 	footer:SetText("/aw or /auctionwatch to show this report.");
-	local w = (params.width -20) / 3;
+	local w = (params.width + 1.5) / 3;
 	params = {
 		anchor = "BOTTOMRIGHT",
 		parent = aw.OutputList,
 		relFrame = aw.OutputList,
 		relPoint = "BOTTOMRIGHT",
-		xOff = -10,
-		yOff = 10,
+		xOff = -5,
+		yOff = 0,
 		width = w,
 		height = 30,
 		caption	= "Swap Sort",
@@ -108,8 +108,8 @@ function aw:OutputFrame()
 		parent = aw.OutputList,
 		relFrame = aw.OutputList,
 		relPoint = "BOTTOMRIGHT",
-		xOff = -10 - w,
-		yOff = 10,
+		xOff = -w,
+		yOff = 0,
 		width = w,
 		height = 30,
 		caption	= "Remove Toon",
@@ -122,8 +122,8 @@ function aw:OutputFrame()
 		parent = aw.OutputList,
 		relFrame = aw.OutputList,
 		relPoint = "BOTTOMRIGHT",
-		xOff = -10 - (2 * w),
-		yOff = 10,
+		xOff = -w-w+5,
+		yOff = 0,
 		width = w,
 		height = 30,
 		caption	= "Options",
@@ -133,13 +133,11 @@ function aw:OutputFrame()
 					end;
 	}
 	aw:createButton(params);
-	local iconFrame = CreateFrame("Frame", nil, aw.OutputList)
-	iconFrame:SetPoint("TOPLEFT", aw.OutputList, "TOPLEFT");
-	iconFrame:SetSize(48, 48)	
-	local iconTexture = iconFrame:CreateTexture("DIALOG")
-	iconTexture:SetSize(48, 48)
-	iconTexture:SetPoint("TOPLEFT", aw.OutputList, "TOPLEFT", -10, 5)
-	iconTexture:SetTexture("Interface\\AddOns\\AuctionWatch\\AW_Button.blp")
+	aw.OutputList.PortraitContainer.portrait:SetTexture("Interface\\AddOns\\AuctionWatch\\AW_Button.blp");	
+	local colHeader = aw.OutputList:CreateFontString( nil, "OVERLAY", "GameFontNormal");
+	colHeader:SetPoint("TOPRIGHT",aw.OutputList, "TOPRIGHT", -5, -35);
+	colHeader:SetJustifyH("LEFT");
+	colHeader:SetText("Time Since Last Visit\nto the Auction House");
 	aw.OutputList:SetScript("OnShow", function(self)
 		local a, n, d, h, m = aw:GetAuctions();
 		txtAuctions:SetText(a);		

@@ -1,4 +1,4 @@
--- Edited Mar 16, 2023
+-- Edited Jun 20, 2023
 
 local _, aw = ...;
 aw.ID = GetUnitName("player") .. "-" .. GetRealmName();
@@ -10,6 +10,12 @@ SlashCmdList.AUCTIONWATCH = function(msg)
 end
 function AuctionWatch_OnAddonCompartmentClick()
 	aw.OutputList:Show();
+end;
+function AuctionWatch_OnAddonCompartmentEnter()
+	aw.OutputList:Show();
+end;
+function AuctionWatch_OnAddonCompartmentLeave()
+	aw.OutputList:Hide();
 end;
 local frame = CreateFrame("FRAME");
 frame:RegisterEvent("SPELLS_CHANGED");
