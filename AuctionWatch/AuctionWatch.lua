@@ -1,4 +1,4 @@
--- Edited Jun 20, 2023
+-- Edited Feb 23, 2024
 
 local _, aw = ...;
 aw.ID = GetUnitName("player") .. "-" .. GetRealmName();
@@ -8,15 +8,37 @@ SLASH_AUCTIONWATCH2 = "/aw";
 SlashCmdList.AUCTIONWATCH = function(msg)
 	aw.OutputList:Show();
 end
-function AuctionWatch_OnAddonCompartmentClick()
-	aw.OutputList:Show();
-end;
-function AuctionWatch_OnAddonCompartmentEnter()
-	aw.OutputList:Show();
-end;
-function AuctionWatch_OnAddonCompartmentLeave()
-	aw.OutputList:Hide();
-end;
+ AddonCompartmentFrame:RegisterAddon({
+	text = "Auction Watch",
+	icon = "Interface\\AddOns\\AuctionWatch\\aw.blp",
+	notCheckable = true,
+	registerForAnyClick = true,
+	func = function(btn, arg1, arg2, checked, mouseButton)
+		if mouseButton == "LeftButton" then
+			aw.OutputList:Show();
+			if IsShiftKeyDown() then 
+				aw.OutputList:ClearAllPoints();
+				aw.OutputList:SetPoint("CENTER", UIParent, "CENTER");
+			end;
+		elseif mouseButton == "RightButton" then			
+			InterfaceOptionsFrame_OpenToCategory(aw.panel);
+			InterfaceOptionsFrame_OpenToCategory(aw.panel); 
+		end;
+	end,
+	funcOnEnter = function()
+		GameTooltip:SetOwner(AddonCompartmentFrame, "ANCHOR_TOPRIGHT");	
+		GameTooltip:AddLine(aw:colorString("white", "     Auction Watch"));
+		GameTooltip:AddLine(" ");
+		GameTooltip:AddLine("     Left Click - Open Window.     ");		
+		GameTooltip:AddLine("     Right Click - Options...     ");
+		GameTooltip:AddLine("     <SHIFT> Left Click - Center Window.     ");
+		GameTooltip:AddLine(" ");
+		GameTooltip:Show();
+	end,
+	funcOnLeave = function()
+		GameTooltip:Hide();
+	end,
+ })
 local frame = CreateFrame("FRAME");
 frame:RegisterEvent("SPELLS_CHANGED");
 frame:RegisterEvent("PLAYER_LOGIN");
