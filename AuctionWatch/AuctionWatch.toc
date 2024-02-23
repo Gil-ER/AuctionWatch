@@ -1,14 +1,11 @@
-## Interface: 100205
+## Interface: 100206
 
 ## Title: Auction Watch
 ## Notes: Reminds you to log back into a toon after posting auctions.
 ## DefaultState: enabled
-## Version: 10.2.5
+## Version: 10.2.6
 ## Author: Gildina
 
-## AddonCompartmentFunc: AuctionWatch_OnAddonCompartmentClick
-## AddonCompartmentFuncOnEnter: AuctionWatch_OnAddonCompartmentEnter
-## AddonCompartmentFuncOnLeave: AuctionWatch_OnAddonCompartmentLeave
 ## IconTexture: Interface\AddOns\AuctionWatch\aw.blp  
 ## SavedVariables: aWatchDB
 
