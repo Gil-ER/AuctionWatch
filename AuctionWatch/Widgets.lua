@@ -1,8 +1,8 @@
--- Edited Jun 20, 2023
+-- Edited Feb 23, 2024
 
 local addon, aw = ...;
 function aw:colorString(c, str)
-	local color = 	{ ["red"] = "RED_FONT_COLOR:", ["green"]  = "GREEN_FONT_COLOR:" }
+	local color = 	{ ["red"] = "RED_FONT_COLOR:", ["green"]  = "GREEN_FONT_COLOR:", ["white"]  = "WHITE_FONT_COLOR:" }
 	if str == nil then str = "nil"; end;
 	return ("\124cn" .. color[c] .. str);
 end;
